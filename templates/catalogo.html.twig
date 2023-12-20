@@ -1,0 +1,67 @@
+{% extends "base.html.twig" %}
+{% block title %}Catalogo
+{% endblock %}
+{% block css %}
+	<link rel="stylesheet" href="{{ asset("css/catalogo.css") }}"></link>{% endblock %}{% block javascripts %}
+<script>
+	const ruta_admin = "{{ path('nuevo_contenido') }}";
+const ruta_contenido = "{{ path('contenido', {'codigo' : 'numero','nombre': 'titulo' }) }}";
+const filtros = JSON.parse('{{ filtros | raw }}');
+</script>
+<script src="{{asset('js/catalogo.js')}}" defer></script>{% endblock %}{% block body %}
+<section>
+	<div class="titulo">Catálogo</div>
+	<form class="container_filtros" action="{{path('catalogo')}}" method="post">
+		<div class="filtros">
+			<div>Tipo</div>
+			<ul class="option">
+				<li><input type="checkbox" name="tipo[]" value="0"/>Pelicula</li>
+				<li><input type="checkbox" name="tipo[]" value="1"/>Serie</li>
+			</ul>
+		</div>
+		{% if generos is not null%}
+			<div class="filtros">
+				<div>Genero</div>
+				<ul class="option lista_generos">
+					{% for item in generos %}
+						<li><input type="checkbox" name="generos[]" value="{{item.getId()}}"/>{{item.getNombre()}}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+		<div class="filtros">
+			<div>Año</div>
+			<ul class="option lista_fechas">
+				{% for item in fecha %}
+					<li><input type="checkbox" name='fecha[]' value="{{item}}"/>{{item}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="filtros">
+			<div>Fecha</div>
+			<ul class="option">
+				<li><input type="checkbox" name="ordenar" value="1"/>ASC</li>
+				<li><input type="checkbox" name="ordenar" value="0"/>DESC</li>
+			</ul>
+		</div>
+		<button>Filtrar</button>
+		{% if is_granted('ROLE_ADMIN') %}
+			<button type='button' class="admin">Agregar contenido</button>
+		{% endif %}
+		{% if titulo_buscar is not null %}
+			<div>
+				Filtros para:
+				<b>{{titulo_buscar}}</b>
+			</div>
+			<input type="text" value="{{titulo_buscar}}" name="titulo" style="display:none;">
+		{% endif %}
+	</form>
+	<div class="categoria_box" id="contenedor_card">
+		{% for contenido in contenidos %}
+			<div class="card" data-codigo="{{contenido.getId()}}" data-nombre="{{contenido.getTitulo()}}">
+				<img class="img" src="{{asset('Contenido/c')}}{{contenido.getId()}}/poster/{{contenido.getPoster()}}" alt="{{contenido.getTitulo()}}" loading='lazy'>
+				<h3>{{contenido.getTitulo()}}</h3>
+			</div>
+		{% endfor %}
+	</div>
+</section>{% endblock %}

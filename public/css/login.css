@@ -1,0 +1,71 @@
+section {
+  position: absolute;
+  height: calc(100% - 5rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+section form {
+  padding: 3rem 0;
+  border-radius: 10px;
+  background: rgb(243, 243, 243);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 25rem;
+  align-items: center;
+  justify-content: center;
+}
+section form > * {
+  margin-bottom: 0.625rem;
+  max-width: 70%;
+}
+p,
+section form a, b {
+  text-align: center;
+}
+section form input:focus,
+section form input {
+  padding: 1rem;
+  outline: none;
+}
+.credenciales {
+  display: flex;
+  flex-direction: column;
+  width: 20rem;
+}
+section form img {
+  width: 2rem;
+  position: absolute;
+  right: 0;
+}
+.credenciales div input {
+  width: 100%;
+  padding-right: 2rem;
+}
+.credenciales div{
+  position: relative;
+}
+section form label {
+  margin-bottom: 0.625rem;
+}
+section form input,
+.credenciales div {
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 0.6rem;
+  border: 0;
+  height: 2rem;
+}
+section form button {
+  padding: 0.2rem 0.5rem;
+  transform: scale(1.05);
+}
+a,button, section form img{
+  cursor: pointer;
+}
+@media (max-width: 340px) {
+  section form{
+    width: 100%;
+  }
+}

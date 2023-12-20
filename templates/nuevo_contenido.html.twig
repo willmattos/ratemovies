@@ -1,0 +1,72 @@
+{% extends "base.html.twig" %}
+{% block title %}Login
+{% endblock %}
+{% block css %}
+	<link rel="stylesheet" href="{{ asset("css/admin.css") }}"></link>{% endblock %}{% block javascripts %}
+<script src="{{asset("js/admin.js")}}" defer></script>{% endblock %}{% block body %}
+<section>
+	<form action="{{path('crearContenido')}}" enctype='multipart/form-data' method='post'>
+		<div class="main column">
+			<div class="row">
+				<label for="">Tipo</label>
+				<select name="tipo">
+					<option value="1" selected>Pelicula</option>
+					<option value="0">Serie</option>
+				</select>
+			</div>
+			<div class="row">
+				<label for="">Titulo</label><input type="text" name='titulo' required placeholder='Una buena receta'>
+			</div>
+			<div class="row">
+				<label for="">Alias (Opcional)</label><input type="text" name='alias' placeholder='Burnt'>
+			</div>
+			<div class="row">
+				<label for="">Estreno</label><input type="date" name='fecha'>
+			</div>
+			<div class='row'>
+				<label for="generos">Generos</label>
+				<input type="text" list="generos" placeholder='Comedia, Drama' id="genero">
+				<datalist id="generos">
+					{% for item in generos %}
+						<option value="{{item.getNombre()}}"></option>
+					{% endfor %}
+				</datalist>
+			</div>
+			<div class="row generos"></div>
+			<div class='row'>
+				<label for="reparto">Reparto</label>
+				<input type="text" list="reparto" placeholder='Will Smith, Tom Cruise' id="reparto">
+				<datalist id="reparto">
+					{% for item in actores %}
+						<option value="{{item.getNombre()}}"></option>
+					{% endfor %}
+				</datalist>
+			</div>
+			<div class="row reparto"></div>
+			<div style='display: none;' class='genres'></div>
+			<div style='display: none;' class='actress'></div>
+			<div class="column">
+				<label for="">Descripcion</label>
+				<textarea name="descripcion" id="" cols="30" rows="10" required placeholder='...'></textarea>
+			</div>
+			<button>Publicar</button>
+		</div>
+		<div class="row contenedor_fotos">
+			<div class="column archivo">
+				<div class="contenedor_file">
+					<input type="file" name="poster" id="poster" class='file_upload'>
+					<div class='nombre_archivo'>Poster</div>
+				</div>
+				<img alt="" class="poster imagenes">
+			</div>
+			<div class="column archivo">
+				<div class="contenedor_file">
+					<input type="file" name="portada" id="poster" class='file_upload'>
+					<div class='nombre_archivo'>Portada</div>
+				</div>
+				<img alt="" class="portada imagenes">
+			</div>
+		</div>
+	</form>
+
+</section>{% endblock %}

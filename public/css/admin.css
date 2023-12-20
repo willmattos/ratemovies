@@ -1,0 +1,115 @@
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+form{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.serie {
+  display: none;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+.contenedor_file{
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  position: relative;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+  cursor: pointer;
+}
+.nombre_archivo{
+  margin: 0.25rem;
+}
+.contenedor_file:hover{
+  background-color: #e4e4e4;
+}
+
+.main {
+  align-items: stretch;
+  gap: 0.5rem;
+}
+.main > .row {
+  justify-content: space-between;
+}
+textarea {
+  resize: none;
+  padding: 0.5rem;
+  width: 100%;
+  height: 5rem;
+}
+input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.generos {
+  justify-content: space-evenly !important;
+}
+.generos div {
+  border: 1px solid;
+}
+.imagenes{
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+  object-fit: cover;
+}
+.poster {
+  height: 15.625rem;
+  width: 10.4rem;
+}
+.portada{
+  width: 25.51906rem;
+  height: 15.3125rem;
+}
+.contenedor_fotos{
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 1rem;
+  gap: 1rem;
+}
+.archivo{
+  gap: 0.25rem;
+}
+.reparto,.generos{
+  justify-content: space-evenly !important;
+}
+.actor_reparto,.generos_contenido{
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+  background-color: rgb(75, 170, 190);
+  color: #ffffff;
+  padding: 0.25rem;
+  cursor: pointer;
+}
+@media (max-width: 470px) {
+  .contenedor_fotos{
+    flex-direction: column;
+  }
+  .portada{
+    width: 100%;
+    height: 10rem;
+  }
+}

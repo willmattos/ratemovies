@@ -1,5 +1,9 @@
 doctrine:
     dbal:
+        # driver: 'pdo_sqlite'
+        # path: '%kernel.cache_dir%/database.sqlite'
+        # memory: true
+        # charset: UTF8
         url: '%env(resolve:DATABASE_URL)%'
 
         # IMPORTANT: You MUST configure your server version,

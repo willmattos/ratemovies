@@ -1,0 +1,280 @@
+/* img {
+  overflow-clip-margin: content-box;
+  overflow: clip;
+} */
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+.cabecera {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 1rem 0;
+}
+.foto {
+  object-fit: cover;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  background-color: #e4e4e4;
+}
+.datos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.usuario {
+  font-size: 2rem;
+  font-weight: 350;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.seguidores {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.seguidores > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.seguidores div,
+.correo {
+  font-weight: 200;
+}
+.seguidores label {
+  font-weight: 400;
+}
+.seccion {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.batch {
+  display: flex;
+  font-size: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.mas{
+  margin: 0 auto;
+  cursor: pointer;
+  border: 1px solid;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+}
+.categoria_box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.seguidores_box {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.follow {
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  transition: background-color 0.5s ease, font-weight 0.3s ease;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+  -webkit-transition: background-color 0.5s ease, font-weight 0.3s ease;
+  -moz-transition: background-color 0.5s ease, font-weight 0.3s ease;
+  -ms-transition: background-color 0.5s ease, font-weight 0.3s ease;
+  -o-transition: background-color 0.5s ease, font-weight 0.3s ease;
+}
+.nombre_usuario {
+  transition: font-weight 0.3s ease;
+  -webkit-transition: font-weight 0.3s ease;
+  -moz-transition: font-weight 0.3s ease;
+  -ms-transition: font-weight 0.3s ease;
+  -o-transition: font-weight 0.3s ease;
+}
+/* .nombre_usuario:hover {
+  font-weight: 650;
+}
+ */
+.follow:hover {
+  font-weight: 650;
+}
+.batch_usuarios {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-direction: row;
+}
+.seguidores_box .foto {
+  width: 2rem;
+  height: 2rem;
+  font-weight: 350;
+}
+.card,
+.card .img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  justify-content: end;
+  align-items: center;
+  position: relative;
+  transition: 0.8s;
+  height: 15.625rem;
+  width: 10.4rem;
+  cursor: pointer;
+}
+.card h3 {
+  text-align: center;
+}
+/* .card:hover {
+  transform: scale(1.03);
+} */
+.card .img {
+  object-fit: cover;
+  position: absolute;
+  z-index: -1;
+}
+.corazon {
+  cursor: pointer;
+  position: absolute;
+  width: 1.25rem;
+  height: 1.25rem;
+  top: 0.25rem;
+  right: 0.25rem;
+  object-fit: cover;
+  border-radius: 0.25rem;
+  -webkit-border-radius: 0.25rem;
+  -moz-border-radius: 0.25rem;
+  -ms-border-radius: 0.25rem;
+  -o-border-radius: 0.25rem;
+}
+.corazon_fav,
+.corazon_dislike:hover {
+  background-color: #cc1602;
+}
+.corazon_fav:hover,
+.corazon_dislike {
+  background-color: transparent;
+}
+.cancelar,
+.aceptar {
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+}
+.editar_perfil,
+.aceptar_modificar,
+.cancelar_modificar {
+  /*border: 1px solid #000000;
+  */
+  height: 100%;
+  width: auto;
+  border-radius: 50%;
+  cursor: pointer;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
+.editar_perfil:hover {
+  background-color: #e4e4e4;
+}
+.cancelar_modificar:hover {
+  background-color: #920a0a;
+}
+.aceptar_modificar:hover {
+  background-color: #0dac2e;
+}
+.usuario_perfil,
+.editar_foto {
+  display: flex;
+  align-items: center;
+}
+.usuario_perfil > * {
+  border: 1px solid black;
+}
+.editar_foto {
+  justify-content: center;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  position: relative;
+}
+.editar_foto .herramienta {
+  width: 2rem;
+  height: 2rem;
+  background-color: #e4e4e4;
+  opacity: 0.5;
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+}
+.foto_fondo {
+  object-fit: cover;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  background-color: #e4e4e4;
+  position: absolute;
+}
+input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+@media (max-width: 340px) {
+  .card {
+    width: calc(50% - 0.5rem);
+    height: 10.5rem;
+  }
+  .batch{
+    width: 100%;
+  }
+}

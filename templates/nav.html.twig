@@ -1,0 +1,40 @@
+<nav>
+	<input type="checkbox" id="check"/>
+	<label for="check" class="checkbtn">
+		<i class="bx bx-menu"></i>
+	</label>
+	<label class="logo">
+		<a href="{{path('home')}}">RATEMOVIES</a>
+	</label>
+	<ul>
+		<li class="search">
+			<form class="conten-box-search" action="{{path('catalogo')}}" method="post">
+				<div class="box">
+					<input type="text" name="titulo" placeholder="Buscador..."/>
+					<img src="{{asset("iconos/search-solid.svg")}}" alt=""/>
+				</div>
+			</form>
+		</li>
+		<li>
+			<a href="{{path("home")}}" {# class="active" #}>home</a>
+		</li>
+		<li>
+			<a href="{{path("catalogo")}}">Catálogo</a>
+		</li>
+		{% if app.user is not null %}
+			<li>
+				<a href="{{path("comunidad")}}">Comunidad</a>
+			</li>
+		{% endif %}
+		<li>
+			<a href="{{path("perfil")}}" class="iconos">
+				<span>Perfil</span><img src="{{asset("iconos/usuario-de-perfil.png")}}" alt=""></a>
+		</li>
+		{% if app.user is not null%}
+			<li>
+				<a href="{{path("logout")}}" class="iconos">
+					<span>Salir</span><img src="{{asset("iconos/log-out.png")}}" alt=""></a>
+			</li>
+		{% endif %}
+	</ul>
+</nav>

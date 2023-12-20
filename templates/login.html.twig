@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+{% block title %}Login
+{% endblock %}
+{% block css %}
+	<link rel="stylesheet" href="{{ asset('css/login.css') }}"></link>{% endblock %}{% block javascripts %}
+<script>
+	let login = "{{ path('identification') }}"
+// cambiar por el de recuperar
+let recuperar = "{{ path('recuperarCuenta') }}"
+// cambiar por el de crear
+let crear = "{{ path('crearUsuario') }}"
+</script>
+<script src="{{asset('js/login.js')}}" defer></script>{% endblock %}{% block body %}
+<section>
+	<form action="{{path('identification')}}" method="post">
+		<h1>Bienvenido</h1>
+		<p>Hey ingresa tus credenciales para entrar en tu cuenta</p>
+		{% if errorMessages %}
+			<b>{{errorMessages.0}}</b>
+		{% endif %}
+		<div class="credenciales">
+			<label for="username">Correo/Usuario:</label>
+			<input type="text" name="_username"/>
+		</div>
+		<div class="credenciales">
+			<label for="username">Usuario:</label>
+			<input type="text" name="usuario" maxlength="10"/>
+		</div>
+		<div class="credenciales">
+			<label for="clave">Contraseña:</label>
+			<div>
+				<input type="password" id="clave" name="_password"/>
+				<img src="iconos/Eye-Icon-wsj93.png" alt=""/>
+			</div>
+		</div>
+		<a id="recuperar">¿Olvidaste tu contraseña?</a>
+		<button type="submit" class="button">Sign in</button>
+		<a id="crear">¿No tienes cuenta?
+			<strong>Registrate ahora</strong>
+		</a>
+	</form>
+</section>{% endblock %}

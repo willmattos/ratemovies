@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+{% block title %}Home
+{% endblock %}
+{% block css %}
+	<link rel="stylesheet" href="{{asset("css/home.css")}}"/>
+	<link rel="stylesheet" href="{{asset("css/splide.min.css")}}"/>
+{% endblock %}
+{% block javascripts %}
+	<script>
+		const ruta_contenido = "{{ path('contenido', {'codigo' : 'numero','nombre': 'titulo' }) }}";
+	</script>
+	<script src="{{asset("js/splide.min.js")}}"></script>
+	<script src="{{asset("js/home.js")}}" defer></script>
+{% endblock %}
+{% block body %}
+	<section>
+		{% if destacados is not null%}
+			<div class="splide" role="group" aria-label="Splide Basic HTML Example">
+				<div class="splide__track">
+					<ul class="splide__list">
+						{% for contenido in destacados %}
+							{% if contenido.getPortada() is not null %}
+								<li class="splide__slide" data-codigo="{{contenido.getId()}}" data-nombre="{{contenido.getTitulo()}}">
+									<div class="card-heading">
+										<div class="destacado_tipo">
+											{% if contenido.getSerie() == 1 %}Serie{% else %}Pelicula
+											{% endif %}
+										</div>
+										<div>{{contenido.getTitulo()}}
+											({{contenido.getEstreno()|date('Y')}})</div>
+									</div>
+									<img class="portada" src="{{asset('Contenido/c')}}{{contenido.getId()}}/portada/{{contenido.getPortada()}}" alt="{{contenido.getTitulo()}}">
+								</li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		{% endif %}
+		{% if popular.todo is not  null %}
+			<div class="seccion">
+				<div class="titulo">
+					<div>Popular</div>
+					<div>
+						<a class="selec_todo">Todo</a>
+						<a class="selec_pelicula">Peliculas</a>
+						<a class="selec_serie">Series</a>
+					</div>
+				</div>
+				<div class="categoria_box todo_select">
+					{% for contenido in popular.todo %}
+						{% if contenido.getPoster() is not null %}
+							<div class="card" data-codigo="{{contenido.getId()}}" data-nombre="{{contenido.getTitulo()}}">
+								<img class="img" src="{{asset('Contenido/c')}}{{contenido.getId()}}/poster/{{contenido.getPoster()}}" alt="imagen de contenido">
+								<h3>{{contenido.getTitulo()}}</h3>
+							</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<div class="categoria_box pelicula_select" style="display: none;">
+					{% if popular.pelicula is not null %}
+						{% for contenido in popular.pelicula %}
+							{% if contenido.getPoster() is not null %}
+								<div class="card" data-codigo="{{contenido.getId()}}" data-nombre="{{contenido.getTitulo()}}">
+									<img class="img" src="{{asset('Contenido/c')}}{{contenido.getId()}}/poster/{{contenido.getPoster()}}" alt="imagen de contenido">
+									<h3>{{contenido.getTitulo()}}</h3>
+								</div>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+				</div>
+				<div class="categoria_box serie_select" style="display: none;">
+					{% if popular.serie is not null %}
+						{% for contenido in popular.serie %}
+							{% if contenido.getPoster() is not null %}
+								<div class="card" data-codigo="{{contenido.getId()}}" data-nombre="{{contenido.getTitulo()}}">
+									<img class="img" src="{{asset('Contenido/c')}}{{contenido.getId()}}/poster/{{contenido.getPoster()}}" alt="imagen de contenido">
+									<h3>{{contenido.getTitulo()}}</h3>
+								</div>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+		{% endif %}
+		{% if novedades is not null %}
+			<div class="seccion seccion_novedades">
+				<div class="titulo">
+					<div>Novedades</div>
+					<div>
+						<a class="selec_todo">Todo</a>
+						<a class="selec_pelicula">Peliculas</a>
+						<a class="selec_serie">Series</a>
+					</div>
+				</div>
+				<div class="categoria_box todo_select">
+					{% for contenido in novedades %}
+						{% if contenido.getPoster() is not null %}
+							<div class="card" data-codigo="{{contenido.getId()}}" data-nombre="{{contenido.getTitulo()}}">
+								<img class="img" src="{{asset('Contenido/c')}}{{contenido.getId()}}/poster/{{contenido.getPoster()}}" alt="imagen de contenido">
+								<h3>{{contenido.getTitulo()}}</h3>
+							</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<div class="categoria_box pelicula_select" style="display: none;">
+					{% for contenido in novedades_peliculas %}
+						{% if contenido.getPoster() is not null %}
+							<div class="card" data-codigo="{{contenido.getId()}}" data-nombre="{{contenido.getTitulo()}}">
+								<img class="img" src="{{asset('Contenido/c')}}{{contenido.getId()}}/poster/{{contenido.getPoster()}}" alt="imagen de contenido">
+								<h3>{{contenido.getTitulo()}}</h3>
+							</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<div class="categoria_box serie_select" style="display: none;">
+					{% for contenido in novedades_series %}
+						{% if contenido.getPoster() is not null %}
+							<div class="card" data-codigo="{{contenido.getId()}}" data-nombre="{{contenido.getTitulo()}}">
+								<img class="img" src="{{asset('Contenido/c')}}{{contenido.getId()}}/poster/{{contenido.getPoster()}}" alt="imagen de contenido">
+								<h3>{{contenido.getTitulo()}}</h3>
+							</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		{% endif %}
+	</section>
+
+{% endblock %}

@@ -1,0 +1,97 @@
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.titulo {
+  font-size: 2rem;
+}
+.row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.foto {
+  width: 2rem;
+  height: 2rem;
+  font-weight: 350;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
+.usuarios_box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.usuarios {
+  justify-content: center;
+}
+.botones {
+  display: flex;
+  gap: 0.5rem;
+}
+.nombre_usuario {
+  cursor: pointer;
+  transition: font-weight 0.3s ease;
+  -webkit-transition: font-weight 0.3s ease;
+  -moz-transition: font-weight 0.3s ease;
+  -ms-transition: font-weight 0.3s ease;
+  -o-transition: font-weight 0.3s ease;
+  width: 7rem;
+  height: 1rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nombre_usuario:hover {
+  font-weight: 600;
+}
+.bloquear:hover,
+.quitar_admin:hover {
+  background-color: #d70000;
+  color: #ffffff;
+}
+.admin:hover,
+.desbloquear:hover {
+  background-color: #08731f;
+  color: #ffffff;
+}
+.rol_admin:hover {
+  background-color: #106b98;
+  color: #ffffff;
+}
+.rol_superadmin:hover {
+  color: #ffffff;
+  background-color: #000000;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  transition: background-color 0.5s ease, font-weight 0.3s ease;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+  -webkit-transition: background-color 0.5s ease, font-weight 0.3s ease;
+  -moz-transition: background-color 0.5s ease, font-weight 0.3s ease;
+  -ms-transition: background-color 0.5s ease, font-weight 0.3s ease;
+  -o-transition: background-color 0.5s ease, font-weight 0.3s ease;
+}
+.bloq,
+.adm {
+  width: 8rem;
+  text-align: center;
+}

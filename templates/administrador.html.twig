@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+{% block title %}Login
+{% endblock %}
+{% block css %}
+	<link rel="stylesheet" href="{{ asset('css/administracion.css') }}"></link>{% endblock %}{% block javascripts %}
+<script>
+	const ruta_filtrar_usuarios = "{{ path('filtrarUsuario') }}";
+const ruta_bloquear_usuarios = "{{ path('bloquearUsuario') }}";
+const ruta_admin_usuarios = "{{ path('hacerAdmin') }}";
+const ruta_quitar_admin_usuarios = "{{ path('quitarAdmin') }}";
+const ruta_usuario_perfil = "{{ path('usuario', {'username' : 'numero' }) }}";
+const userfoto = "{{ asset('iconos/default-user.jpg') }}";
+</script>
+<script src="{{asset('js/administracion.js')}}" defer></script>{% endblock %}{% block body %}
+<section>
+	<div class="titulo">Administracion</div>
+	<div class="row">
+		<label for="filtrar">Buscador:</label>
+		<input type="text" class="filtrar" placeholder='Usuario'>
+	</div>
+	<div class="usuarios_box"></div>
+</section>{% endblock %}
