@@ -14,67 +14,52 @@ class Like
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $cod_critica = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $cod_comentario = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $cod_usuario = null;
+    #[ORM\ManyToOne(inversedBy: 'likes')]
+    private ?Critica $critica = null;
 
     #[ORM\ManyToOne]
-    private ?User $usuario_objeto = null;
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'likes')]
+    private ?Comentario $comentario = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCodCritica(): ?int
+    public function getCritica(): ?Critica
     {
-        return $this->cod_critica;
+        return $this->critica;
     }
 
-    public function setCodCritica(int $cod_critica): static
+    public function setCritica(?Critica $critica): static
     {
-        $this->cod_critica = $cod_critica;
+        $this->critica = $critica;
 
         return $this;
     }
 
-    public function getCodComentario(): ?int
+    public function getUser(): ?User
     {
-        return $this->cod_comentario;
+        return $this->user;
     }
 
-    public function setCodComentario(?int $cod_comentario): static
+    public function setUser(?User $user): static
     {
-        $this->cod_comentario = $cod_comentario;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getCodUsuario(): ?int
+    public function getComentario(): ?Comentario
     {
-        return $this->cod_usuario;
+        return $this->comentario;
     }
 
-    public function setCodUsuario(?int $cod_usuario): static
+    public function setComentario(?Comentario $comentario): static
     {
-        $this->cod_usuario = $cod_usuario;
-
-        return $this;
-    }
-
-    public function getUsuarioObjeto(): ?User
-    {
-        return $this->usuario_objeto;
-    }
-
-    public function setUsuarioObjeto(?User $usuario_objeto): static
-    {
-        $this->usuario_objeto = $usuario_objeto;
+        $this->comentario = $comentario;
 
         return $this;
     }

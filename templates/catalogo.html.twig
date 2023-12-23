@@ -5,7 +5,7 @@
 	<link rel="stylesheet" href="{{ asset("css/catalogo.css") }}"></link>{% endblock %}{% block javascripts %}
 <script>
 	const ruta_admin = "{{ path('nuevo_contenido') }}";
-const ruta_contenido = "{{ path('contenido', {'codigo' : 'numero','nombre': 'titulo' }) }}";
+const ruta_contenido = "{{ path('contenido', {'id' : 'numero','nombre': 'titulo' }) }}";
 const filtros = JSON.parse('{{ filtros | raw }}');
 </script>
 <script src="{{asset('js/catalogo.js')}}" defer></script>{% endblock %}{% block body %}

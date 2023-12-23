@@ -3,8 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\CriticaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Boolean;
 
 #[ORM\Entity(repositoryClass: CriticaRepository::class)]
 class Critica
@@ -20,21 +23,29 @@ class Critica
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
     private ?\DateTimeInterface $fecha = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $cod_contenido = null;
+    #[ORM\ManyToOne(inversedBy: 'criticas')]
+    private ?User $user = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $cod_usuario = null;
-
-    #[ORM\ManyToOne]
-    private ?User $usuario = null;
-
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'criticas')]
     private ?Contenido $contenido = null;
 
-    private $comentarios;
-    private $likes;
-    private $ownlike;
+    #[ORM\OneToMany(mappedBy: 'critica', targetEntity: Comentario::class)]
+    private Collection $comentarios;
+
+    #[ORM\OneToMany(mappedBy: 'critica', targetEntity: Like::class)]
+    private Collection $likes;
+
+    private ?Boolean $myLike;
+
+    public function __construct()
+    {
+        $this->comentarios = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+    }
+
+
+    // private $likes;
+    // private $ownlike;
 
     public function getId(): ?int
     {
@@ -65,38 +76,86 @@ class Critica
         return $this;
     }
 
-    public function getCodContenido(): ?int
+    public function getUser(): ?User
     {
-        return $this->cod_contenido;
+        return $this->user;
     }
 
-    public function setCodContenido(?int $cod_contenido): static
+    public function setUser(?User $user): static
     {
-        $this->cod_contenido = $cod_contenido;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getCodUsuario(): ?int
+    /**
+     * @return Collection<int, Comentario>
+     */
+    public function getComentarios(): Collection
     {
-        return $this->cod_usuario;
+        return $this->comentarios;
     }
 
-    public function setCodUsuario(?int $cod_usuario): static
+    public function addComentario(Comentario $comentario): static
     {
-        $this->cod_usuario = $cod_usuario;
+        if (!$this->comentarios->contains($comentario)) {
+            $this->comentarios->add($comentario);
+            $comentario->setCritica($this);
+        }
 
         return $this;
     }
 
-    public function getUsuario(): ?User
+    public function removeComentario(Comentario $comentario): static
     {
-        return $this->usuario;
+        if ($this->comentarios->removeElement($comentario)) {
+            // set the owning side to null (unless already changed)
+            if ($comentario->getCritica() === $this) {
+                $comentario->setCritica(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function setUsuario(?User $usuario): static
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
     {
-        $this->usuario = $usuario;
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setCritica($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getCritica() === $this) {
+                $like->setCritica(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMyLike()
+    {
+        return $this->myLike;
+    }
+
+    public function setMyLike(?Boolean $myLike)
+    {
+        $this->myLike = $myLike;
 
         return $this;
     }
@@ -109,66 +168,6 @@ class Critica
     public function setContenido(?Contenido $contenido): static
     {
         $this->contenido = $contenido;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of comentarios
-     */ 
-    public function getComentarios()
-    {
-        return $this->comentarios;
-    }
-
-    /**
-     * Set the value of comentarios
-     *
-     * @return  self
-     */ 
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of likes
-     */ 
-    public function getLikes()
-    {
-        return $this->likes;
-    }
-
-    /**
-     * Set the value of likes
-     *
-     * @return  self
-     */ 
-    public function setLikes($likes)
-    {
-        $this->likes = $likes;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of ownlike
-     */ 
-    public function getOwnlike()
-    {
-        return $this->ownlike;
-    }
-
-    /**
-     * Set the value of ownlike
-     *
-     * @return  self
-     */ 
-    public function setOwnlike($ownlike)
-    {
-        $this->ownlike = $ownlike;
 
         return $this;
     }

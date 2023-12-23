@@ -47,7 +47,7 @@ class VisitaRepository extends ServiceEntityRepository
             ->distinct(true)
             ->orderBy('v.fecha', 'DESC')
             ->addOrderBy('v.contador', 'DESC')
-            ->setMaxResults(12)
+            ->setMaxResults(16)
             ->getQuery()
             ->getResult();
     }

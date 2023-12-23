@@ -15,9 +15,6 @@ class Visita
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $cod_contenido = null;
-
-    #[ORM\Column(nullable: true)]
     private ?int $contador = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -29,18 +26,6 @@ class Visita
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCodContenido(): ?int
-    {
-        return $this->cod_contenido;
-    }
-
-    public function setCodContenido(?int $cod_contenido): static
-    {
-        $this->cod_contenido = $cod_contenido;
-
-        return $this;
     }
 
     public function getContador(): ?int

@@ -3,8 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\ComentarioRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Boolean;
 
 #[ORM\Entity(repositoryClass: ComentarioRepository::class)]
 class Comentario
@@ -20,16 +23,24 @@ class Comentario
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
     private ?\DateTimeInterface $fecha = null;
 
-    #[ORM\Column]
-    private ?int $usuario = null;
-
-    #[ORM\Column]
-    private ?int $critica = null;
-
-    private $likes;
-
     #[ORM\ManyToOne]
-    private ?User $usuario_objeto = null;
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comentarios')]
+    private ?Critica $critica = null;
+
+    #[ORM\OneToMany(mappedBy: 'comentario', targetEntity: Like::class)]
+    private Collection $likes;
+
+    private ?Boolean $myLike;
+
+    public function __construct()
+    {
+        $this->likes = new ArrayCollection();
+    }
+
+    // // private $likes;
+
 
     public function getId(): ?int
     {
@@ -60,60 +71,68 @@ class Comentario
         return $this;
     }
 
-    public function getUsuario(): ?int
+    public function getUser(): ?User
     {
-        return $this->usuario;
+        return $this->user;
     }
 
-    public function setUsuario(int $usuario): static
+    public function setUser(?User $user): static
     {
-        $this->usuario = $usuario;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getCritica(): ?int
+    public function getCritica(): ?Critica
     {
         return $this->critica;
     }
 
-    public function setCritica(int $critica): static
+    public function setCritica(?Critica $critica): static
     {
         $this->critica = $critica;
 
         return $this;
     }
 
-
-
-    public function getUsuarioObjeto(): ?User
-    {
-        return $this->usuario_objeto;
-    }
-
-    public function setUsuarioObjeto(?User $usuario_objeto): static
-    {
-        $this->usuario_objeto = $usuario_objeto;
-
-        return $this;
-    }
-
     /**
-     * Get the value of likes
-     */ 
-    public function getLikes()
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
     {
         return $this->likes;
     }
 
-    /**
-     * Set the value of likes
-     *
-     * @return  self
-     */ 
-    public function setLikes($likes)
+    public function addLike(Like $like): static
     {
-        $this->likes = $likes;
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setComentario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getComentario() === $this) {
+                $like->setComentario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMyLike()
+    {
+        return $this->myLike;
+    }
+
+    public function setMyLike($myLike)
+    {
+        $this->myLike = $myLike;
 
         return $this;
     }

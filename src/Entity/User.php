@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -18,6 +20,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $username = null;
+
     #[ORM\Column]
     private array $roles = [];
 
@@ -30,16 +35,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column]
-    private ?int $recuperar;
+    private ?int $recuperar = null;
 
     #[ORM\Column]
-    private ?int $activado;
+    private ?int $activado = null;
 
     #[ORM\Column]
+    private ?int $bloquear = null;
+
+    #[ORM\Column(nullable: true)]
     private ?string $foto;
 
-    #[ORM\Column]
-    private ?int $bloquear;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Critica::class)]
+    private Collection $criticas;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Favorito::class)]
+    private Collection $favoritos;
+
+    public function __construct()
+    {
+        $this->criticas = new ArrayCollection();
+        $this->favoritos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -198,6 +215,90 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRol($rol)
     {
         $this->rol = $rol;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Critica>
+     */
+    public function getCriticas(): Collection
+    {
+        return $this->criticas;
+    }
+
+    public function addCritica(Critica $critica): static
+    {
+        if (!$this->criticas->contains($critica)) {
+            $this->criticas->add($critica);
+            $critica->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCritica(Critica $critica): static
+    {
+        if ($this->criticas->removeElement($critica)) {
+            // set the owning side to null (unless already changed)
+            if ($critica->getUser() === $this) {
+                $critica->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favorito>
+     */
+    public function getFavoritos(): Collection
+    {
+        return $this->favoritos;
+    }
+
+    public function addFavorito(Favorito $favorito): static
+    {
+        if (!$this->favoritos->contains($favorito)) {
+            $this->favoritos->add($favorito);
+            $favorito->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorito(Favorito $favorito): static
+    {
+        if ($this->favoritos->removeElement($favorito)) {
+            // set the owning side to null (unless already changed)
+            if ($favorito->getUser() === $this) {
+                $favorito->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getBloquear(): ?int
+    {
+        return $this->bloquear;
+    }
+
+    public function setBloquear(int $bloquear): static
+    {
+        $this->bloquear = $bloquear;
+
+        return $this;
+    }
+
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    public function setUsername($username)
+    {
+        $this->username = $username;
 
         return $this;
     }

@@ -2,41 +2,27 @@
 
 namespace App\Entity;
 
-use App\Repository\GeneroRepository;
+use App\Repository\GeneroContenidoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: GeneroRepository::class)]
-class Genero
+#[ORM\Entity(repositoryClass: GeneroContenidoRepository::class)]
+class GeneroContenido
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $cod_genero = null;
-
     #[ORM\ManyToOne]
     private ?Generos $genero = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'generos')]
     private ?Contenido $contenido = null;
 
+  
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCodGenero(): ?int
-    {
-        return $this->cod_genero;
-    }
-
-    public function setCodGenero(int $cod_genero): static
-    {
-        $this->cod_genero = $cod_genero;
-
-        return $this;
     }
 
     public function getGenero(): ?Generos
@@ -62,4 +48,6 @@ class Genero
 
         return $this;
     }
+
+   
 }

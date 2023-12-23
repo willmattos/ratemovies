@@ -16,11 +16,17 @@ class Valora
     #[ORM\Column(nullable: true)]
     private ?int $puntuacion = null;
 
-    #[ORM\Column]
-    private ?int $cod_contenido = null;
+    #[ORM\ManyToOne]
+    private ?User $user = null;
 
-    #[ORM\Column]
-    private ?int $cod_usuario = null;
+    #[ORM\ManyToOne(inversedBy: 'valoraciones')]
+    private ?Contenido $contenido = null;
+
+    // #[ORM\Column]
+    // private ?int $cod_contenido = null;
+
+    // #[ORM\Column]
+    // private ?int $cod_usuario = null;
 
     public function getId(): ?int
     {
@@ -39,27 +45,28 @@ class Valora
         return $this;
     }
 
-    public function getCodContenido(): ?int
+    public function getUser(): ?User
     {
-        return $this->cod_contenido;
+        return $this->user;
     }
 
-    public function setCodContenido(int $cod_contenido): static
+    public function setUser(?User $user): static
     {
-        $this->cod_contenido = $cod_contenido;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getCodUsuario(): ?int
+    public function getContenido(): ?Contenido
     {
-        return $this->cod_usuario;
+        return $this->contenido;
     }
 
-    public function setCodUsuario(int $cod_usuario): static
+    public function setContenido(?Contenido $contenido): static
     {
-        $this->cod_usuario = $cod_usuario;
+        $this->contenido = $contenido;
 
         return $this;
     }
+
 }

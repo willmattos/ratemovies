@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ContenidoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -35,9 +37,29 @@ class Contenido
     #[ORM\Column(nullable: true)]
     private ?int $serie = null;
 
-    private $generos;
+    #[ORM\OneToMany(mappedBy: 'contenido', targetEntity: GeneroContenido::class)]
+    private Collection $generos;
+
+    
+    #[ORM\OneToMany(mappedBy: 'contenido', targetEntity: Reparto::class)]
+    private Collection $reparto;
+    
+    #[ORM\OneToMany(mappedBy: 'contenido', targetEntity: Valora::class)]
+    private Collection $valoraciones;
+    
+    #[ORM\OneToMany(mappedBy: 'contenido', targetEntity: Critica::class)]
+    private Collection $criticas;
+    
     private $ownlike;
-    private $reparto;
+
+    public function __construct()
+    {
+        $this->generos = new ArrayCollection();
+        $this->reparto = new ArrayCollection();
+        $this->valoraciones = new ArrayCollection();
+        $this->criticas = new ArrayCollection();
+    }
+   
 
     public function getId(): ?int
     {
@@ -129,26 +151,6 @@ class Contenido
     }
 
     /**
-     * Get the value of reparto
-     */ 
-    public function getReparto()
-    {
-        return $this->reparto;
-    }
-
-    /**
-     * Set the value of reparto
-     *
-     * @return  self
-     */ 
-    public function setReparto($reparto)
-    {
-        $this->reparto = $reparto;
-
-        return $this;
-    }
-
-    /**
      * Get the value of ownlike
      */ 
     public function getOwnlike()
@@ -169,22 +171,124 @@ class Contenido
     }
 
     /**
-     * Get the value of generos
-     */ 
-    public function getGeneros()
+     * @return Collection<int, Genero>
+     */
+    public function getGeneros(): Collection
     {
         return $this->generos;
     }
 
+    // public function addGenero(GeneroContenido $genero): static
+    // {
+    //     if (!$this->generos->contains($genero)) {
+    //         $this->generos->add($genero);
+    //         $genero->setContenido($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeGenero(GeneroContenido $genero): static
+    // {
+    //     if ($this->generos->removeElement($genero)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($genero->getContenido() === $this) {
+    //             $genero->setContenido(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
     /**
-     * Set the value of generos
-     *
-     * @return  self
-     */ 
-    public function setGeneros($generos)
+     * @return Collection<int, Reparto>
+     */
+    public function getReparto(): Collection
     {
-        $this->generos = $generos;
+        return $this->reparto;
+    }
+
+    public function addReparto(Reparto $reparto): static
+    {
+        if (!$this->reparto->contains($reparto)) {
+            $this->reparto->add($reparto);
+            $reparto->setContenido($this);
+        }
 
         return $this;
     }
+
+    public function removeReparto(Reparto $reparto): static
+    {
+        if ($this->reparto->removeElement($reparto)) {
+            // set the owning side to null (unless already changed)
+            if ($reparto->getContenido() === $this) {
+                $reparto->setContenido(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Valora>
+     */
+    public function getValoraciones(): Collection
+    {
+        return $this->valoraciones;
+    }
+
+    public function addValoracione(Valora $valoracione): static
+    {
+        if (!$this->valoraciones->contains($valoracione)) {
+            $this->valoraciones->add($valoracione);
+            $valoracione->setContenido($this);
+        }
+
+        return $this;
+    }
+
+    public function removeValoracione(Valora $valoracione): static
+    {
+        if ($this->valoraciones->removeElement($valoracione)) {
+            // set the owning side to null (unless already changed)
+            if ($valoracione->getContenido() === $this) {
+                $valoracione->setContenido(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Critica>
+     */
+    public function getCriticas(): Collection
+    {
+        return $this->criticas;
+    }
+
+    public function addCritica(Critica $critica): static
+    {
+        if (!$this->criticas->contains($critica)) {
+            $this->criticas->add($critica);
+            $critica->setContenido($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCritica(Critica $critica): static
+    {
+        if ($this->criticas->removeElement($critica)) {
+            // set the owning side to null (unless already changed)
+            if ($critica->getContenido() === $this) {
+                $critica->setContenido(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }
