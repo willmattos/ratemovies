@@ -28,9 +28,9 @@ class VisitaRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('v')
             ->join('v.contenido', 'c')
-            ->select("c.id")
-            ->distinct(true)
-            ->orderBy('v.contador', 'DESC')
+            ->select('c.id', 'count(v.id) as viewsCount')
+            ->groupBy('c.id')
+            ->orderBy('viewsCount', 'DESC')
             ->setMaxResults(6)
             ->getQuery()
             ->getResult();
@@ -44,10 +44,10 @@ class VisitaRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('v')
             ->join('v.contenido', 'c')
             ->select("c.id")
-            ->distinct(true)
-            ->orderBy('v.fecha', 'DESC')
-            ->addOrderBy('v.contador', 'DESC')
-            ->setMaxResults(16)
+            ->groupBy('c.id, v.fecha')
+            ->groupBy('v.contenido, v.fecha')
+            ->orderBy('COUNT(v.id)', 'DESC')
+            ->addOrderBy('v.fecha', 'DESC')
             ->getQuery()
             ->getResult();
     }

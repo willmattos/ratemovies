@@ -1,8 +1,8 @@
 var modificarfoto;
 var fotohtml;
-$(".administrador").click(function(){
+$(".administrador").click(function () {
   window.location.href = ruta_administracion;
-})
+});
 function verFavoritos() {
   var ocultos = $(".categoria_favoritos").children().filter(":hidden");
   if (ocultos.length > 0) {
@@ -71,7 +71,7 @@ $(".follow").click(function () {
 });
 function modificarPerfil() {
   $(".usuario_perfil").html(
-    `<input type='text' name='username' value='${username}' >`
+    `<input type='text' name='username' value='${username}' maxlength="10">`
   );
   modificarfoto = $(this).attr("src");
   $(this).attr("alt", "cancelar cambios");
@@ -122,9 +122,18 @@ function aceptarModificar(e) {
       contentType: false,
       dataType: "json",
       async: true,
-      success: function (response) {},
+      success: function (response) {
+        $(".editar_foto img").eq(0).removeClass("foto_fondo");
+        $(".editar_foto img").eq(0).addClass("foto");
+        $(".cabecera").prepend($(".editar_foto img").eq(0));
+        $(".editar_foto").remove();
+      },
+      error: function (response) {
+        $(".editar_foto").remove();
+        $(".cabecera").prepend(fotohtml);
+      },
     });
-    $(".cabecera .foto").attr("src", URL.createObjectURL(inputFile));
+    // $(".cabecera .foto").attr("src", URL.createObjectURL(inputFile));
   }
   var nombre = $(this).prev().children(0).val();
   $.ajax({
@@ -153,10 +162,10 @@ function aceptarModificar(e) {
         $(posicion).next().addClass("editar_perfil");
         $(posicion).next().removeClass("cancelar_modificar");
         $(posicion).remove();
-        $(".editar_foto img").eq(0).removeClass("foto_fondo");
-        $(".editar_foto img").eq(0).addClass("foto");
-        $(".cabecera").prepend($(".editar_foto img").eq(0));
-        $(".editar_foto").remove();
+        // $(".editar_foto img").eq(0).removeClass("foto_fondo");
+        // $(".editar_foto img").eq(0).addClass("foto");
+        // $(".cabecera").prepend($(".editar_foto img").eq(0));
+        // $(".editar_foto").remove();
       }
     },
   });
@@ -170,7 +179,7 @@ function cancelarModificar(e) {
   $(this).prev().remove();
   $(".editar_foto").remove();
   $(".cabecera").prepend(fotohtml);
-  $(".usuario_perfil").html(username)
+  $(".usuario_perfil").html(username);
 }
 verFavoritos();
 verFavoritos();

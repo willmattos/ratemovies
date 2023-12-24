@@ -41,7 +41,6 @@ $(".categoria_box").on("click", ".card", function (e) {
   window.location.href = url;
 });
 $(".splide__slide").on("click", ".card-heading,.portada", function (e) {
-  console.log("click");
   e.preventDefault();
   e.stopPropagation();
   var url = ruta_contenido;

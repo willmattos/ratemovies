@@ -35,7 +35,7 @@ class Critica
     #[ORM\OneToMany(mappedBy: 'critica', targetEntity: Like::class)]
     private Collection $likes;
 
-    private ?Boolean $myLike;
+    private $myLike;
 
     public function __construct()
     {
@@ -153,7 +153,7 @@ class Critica
         return $this->myLike;
     }
 
-    public function setMyLike(?Boolean $myLike)
+    public function setMyLike($myLike)
     {
         $this->myLike = $myLike;
 

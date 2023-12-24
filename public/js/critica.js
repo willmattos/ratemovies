@@ -158,13 +158,11 @@ function darLike(e) {
       tipo: $(this).parent().data("tipo"),
     },
     dataType: "json",
+    async: true,
     success: function (response) {
-      console.log(parseInt($(like).next().text()) || 0);
-      console.log(response);
       if (response.respuesta) {
         var clase;
         var cantidad = parseInt($(like).next().text()) || 0;
-        console.log(cantidad);
         if (response.tipo == 1) {
           clase = "darLike miLike";
           cantidad = cantidad + 1;

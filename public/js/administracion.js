@@ -11,7 +11,7 @@ function filtrar(nombre) {
       $(".usuarios_box").empty();
       response.forEach((element) => {
         var div = $(`<div class="row usuarios" data-codigo="${element.codigo}">
-                  <img src="/ratemovies/public/Usuario/u${element.codigo}/${element.foto}" alt="foto usuario" class="foto">
+                  <img src="/Usuario/u${element.codigo}/${element.foto}" alt="foto usuario" class="foto">
                   <div class="enlace nombre_usuario">${element.usuario}</div>
               </div>`);
         var botones = $(

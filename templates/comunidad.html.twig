@@ -1,5 +1,5 @@
 {% extends "base.html.twig" %}
-{% block title %}Login
+{% block title %}Comunidad
 {% endblock %}
 {% block css %}
 	<link rel="stylesheet" href="{{ asset("css/critica.css") }}"></link><link rel="stylesheet" href="{{ asset("css/comunidad.css") }}"></link>{% endblock %}{% block javascripts %}
@@ -9,7 +9,7 @@ const ruta_eliminar_comentario = "{{ path('eliminarComentario') }}";
 const ruta_crear_like = "{{ path('darLike') }}";
 const ruta_crear_favorito = "{{ path('darFavorito') }}";
 const ruta_usuario_perfil = "{{ path('usuario', {'username' : 'numero' }) }}";
-const ruta_contenido = "{{ path('contenido', {'codigo' : 'numero','nombre': 'titulo' }) }}";{% if app.user is not null %}const username = "{{ app.user.getUsuario() }}";{% if app.user.getFoto() is not null %}const userfoto = "{{ asset('Usuario/') }}u{{ app.user.getCodigo() }}/{{ app.user.getFoto() }}";
+const ruta_contenido = "{{ path('contenido', {'id' : 'numero','nombre': 'titulo' }) }}";{% if app.user is not null %}const username = "{{ app.user.getUsername() }}";{% if app.user.getFoto() is not null %}const userfoto = "{{ asset('Usuario/') }}u{{ app.user.getId() }}/{{ app.user.getFoto() }}";
 {% else %}
 const userfoto = "{{ asset('iconos/default-user.jpg') }}";{% endif %}{% endif %}
 </script>
@@ -22,19 +22,19 @@ const userfoto = "{{ asset('iconos/default-user.jpg') }}";{% endif %}{% endif %}
 				<div class="critica">
 					<div class="comentario">
 						<div class="comentario_datos">
-							{% if critica.getUsuario().getFoto() is not null %}
-								<img src="{{asset('Usuario/')}}u{{critica.getUsuario().getCodigo()}}/{{critica.getUsuario().getFoto()}}" alt="foto usuario">
+							{% if critica.getUser().getFoto() is not null %}
+								<img src="{{asset('Usuario/')}}u{{critica.getUser().getId()}}/{{critica.getUser().getFoto()}}" alt="foto usuario">
 							{% else %}
 								<img src="{{asset('iconos/default-user.jpg')}}" alt="foto usuario" class="foto">
 							{% endif %}
-							<div class="enlace nombre_usuario">{{ critica.getUsuario().getUsuario() }}</div>
+							<div class="enlace nombre_usuario">{{ critica.getUser().getUsername() }}</div>
 							<div>{{ critica.getFecha()|date('Y/m/d H:i:s') }}</div>
 							<div>{{ critica.getContenido().getTitulo() }}</div>
 						</div>
 						<div class="texto">{{ critica.getComentario()|escape|nl2br }}</div>
 						<div class="like">
-							<div data-tipo="1" data-codigo="{{ critica.getCodigo() }}">
-								{% if  critica.getOwnlike() is not  null%}
+							<div data-tipo="1" data-codigo="{{ critica.getId() }}">
+								{% if  critica.getMyLike() %}
 									<label for="" class="darLike miLike">Like</label>
 								{% else %}
 									<label for="" class="darLike">Like</label>
@@ -53,40 +53,40 @@ const userfoto = "{{ asset('iconos/default-user.jpg') }}";{% endif %}{% endif %}
 									{% endif %}
 								</div>
 							</div>
-							{% if app.user is not null and critica.getUsuario().getCodigo() == app.user.getCodigo() %}
-								<div class="eliminar" data-tipo="1" data-codigo="{{ critica.getCodigo() }}">Eliminar</div>
+							{% if app.user is not null and critica.getUser().getId() == app.user.getId() %}
+								<div class="eliminar" data-tipo="1" data-codigo="{{ critica.getId() }}">Eliminar</div>
 							{% endif %}
 						</div>
 					</div>
-					<img src="{{asset('Contenido/c')}}{{critica.getContenido().getCodigo()}}/poster/{{critica.getContenido.getPoster()}}" alt="imagen de contenido" class="card" data-codigo="{{critica.getContenido().getCodigo()}}" data-nombre="{{critica.getContenido().getTitulo()}}">
+					<img src="{{asset('Contenido/c')}}{{critica.getContenido().getId()}}/poster/{{critica.getContenido.getPoster()}}" alt="imagen de contenido" class="card" data-codigo="{{critica.getContenido().getId()}}" data-nombre="{{critica.getContenido().getTitulo()}}">
 				</div>
 				<div class="reply">
 					{% if app.user is not null %}
 						<div class="nuevo_comentario">
 							{% if app.user.getFoto() is not null %}
-								<img src="{{asset('Usuario/')}}u{{app.user.getCodigo()}}/{{app.user.getFoto()}}" alt="foto usuario">
+								<img src="{{asset('Usuario/')}}u{{app.user.getId()}}/{{app.user.getFoto()}}" alt="foto usuario">
 							{% else %}
 								<img src="{{asset('iconos/default-user.jpg')}}" alt="foto usuario" class="foto">
 							{% endif %}
 							<textarea name="" id="" cols="30" rows="10" placeholder="Escribe un comentario"></textarea>
-							<button class="crearComentario" data-codigo="{{critica.getCodigo()}}">enviar</button>
+							<button class="crearComentario" data-codigo="{{critica.getId()}}">enviar</button>
 						</div>
 					{% endif %}
 					{% for comentario in critica.getComentarios() %}
 						<div class="comentario">
 							<div class="comentario_datos">
-								{% if comentario.getUsuario_objeto().getFoto() is not null %}
-									<img src="{{asset('Usuario/')}}u{{comentario.getUsuario_objeto().getCodigo()}}/{{comentario.getUsuario_objeto().getFoto()}}" alt="foto usuario">
+								{% if comentario.getUser().getFoto() is not null %}
+									<img src="{{asset('Usuario/')}}u{{comentario.getUser().getId()}}/{{comentario.getUser().getFoto()}}" alt="foto usuario">
 								{% else %}
 									<img src="{{asset('iconos/default-user.jpg')}}" alt="foto usuario" class="foto">
 								{% endif %}
-								<div class="enlace nombre_usuario">{{ comentario.getUsuario_objeto().getUsuario() }}</div>
+								<div class="enlace nombre_usuario">{{ comentario.getUser().getUsername() }}</div>
 								<div>{{ comentario.getFecha()|date('Y/m/d H:i:s') }}</div>
 							</div>
 							<div class="texto">{{ comentario.getComentario()|escape|nl2br }}</div>
 							<div class="like">
-								<div data-tipo="0" data-codigo="{{ comentario.getCodigo() }}">
-									{% if  comentario.getOwnlike() is not  null%}
+								<div data-tipo="0" data-codigo="{{ comentario.getId() }}">
+									{% if  comentario.getMyLike() %}
 										<label for="" class="darLike miLike">Like</label>
 									{% else %}
 										<label for="" class="darLike">Like</label>
@@ -97,8 +97,8 @@ const userfoto = "{{ asset('iconos/default-user.jpg') }}";{% endif %}{% endif %}
 										{% endif %}
 									</div>
 								</div>
-								{% if app.user is not null and comentario.getUsuario_objeto().getCodigo() == app.user.getCodigo() %}
-									<div class="eliminar" data-tipo="0" data-codigo="{{ comentario.getCodigo() }}">Eliminar</div>
+								{% if app.user is not null and comentario.getUser().getId() == app.user.getId() %}
+									<div class="eliminar" data-tipo="0" data-codigo="{{ comentario.getId() }}">Eliminar</div>
 								{% endif %}
 							</div>
 						</div>

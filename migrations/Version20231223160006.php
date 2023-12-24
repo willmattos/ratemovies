@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20231223093250 extends AbstractMigration
+final class Version20231223160006 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -52,8 +52,9 @@ final class Version20231223093250 extends AbstractMigration
         $this->addSql('CREATE TABLE valora (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER DEFAULT NULL, contenido_id INTEGER DEFAULT NULL, puntuacion INTEGER DEFAULT NULL, CONSTRAINT FK_DD2C9F9EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_DD2C9F9E7FDA517C FOREIGN KEY (contenido_id) REFERENCES contenido (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_DD2C9F9EA76ED395 ON valora (user_id)');
         $this->addSql('CREATE INDEX IDX_DD2C9F9E7FDA517C ON valora (contenido_id)');
-        $this->addSql('CREATE TABLE visita (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, contenido_id INTEGER DEFAULT NULL, contador INTEGER DEFAULT NULL, fecha DATE NOT NULL, CONSTRAINT FK_B7F148A27FDA517C FOREIGN KEY (contenido_id) REFERENCES contenido (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE TABLE visita (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, contenido_id INTEGER DEFAULT NULL, user_id INTEGER DEFAULT NULL, fecha DATE NOT NULL, CONSTRAINT FK_B7F148A27FDA517C FOREIGN KEY (contenido_id) REFERENCES contenido (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_B7F148A2A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_B7F148A27FDA517C ON visita (contenido_id)');
+        $this->addSql('CREATE INDEX IDX_B7F148A2A76ED395 ON visita (user_id)');
         $this->addSql('CREATE TABLE messenger_messages (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, body CLOB NOT NULL, headers CLOB NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , available_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , delivered_at DATETIME DEFAULT NULL --(DC2Type:datetime_immutable)

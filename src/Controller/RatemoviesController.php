@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Service\Service;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,14 +24,13 @@ class RatemoviesController extends AbstractController
         $this->connection = $connection;
     }
 
-    #[Route('/ratemovies', name: 'home')]
+    #[Route('/', name: 'home')]
     public function home(): Response
     {
-        $mostViews = $this->service->getMostViews();
-        $destacados = $this->service->getMostPopular();
+        $destacados = $this->service->getMostViews();
+        $popular = $this->service->getMostPopular();
         $latest = $this->service->getLatestAdditions();
-
-        return $this->render('home.html.twig', ['destacados' => $mostViews, 'popular' => $destacados, 'novedades' => $latest['todo'], 'novedades_peliculas' => $latest['peliculas'], 'novedades_series' => $latest['series']]);
+        return $this->render('home.html.twig', ['destacados' => $destacados, 'popular' => $popular, 'novedades' => $latest['todo'], 'novedades_peliculas' => $latest['peliculas'], 'novedades_series' => $latest['series']]);
     }
     #[Route('/catalogo', name: 'catalogo')]
     public function catalogo()
@@ -48,6 +49,7 @@ class RatemoviesController extends AbstractController
         $contents = [];
         $filtros = ['titulo' => null, 'generos' => [], 'fecha' => [], 'tipo' => [], 'ordenar' => []];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
             $result = $this->service->getContentByFilter($_POST);
             $filtros = $result['filtro'];
             $contents = $result['contenido'];
@@ -59,21 +61,20 @@ class RatemoviesController extends AbstractController
     #[Route('/comunidad', name: 'comunidad')]
     public function comunidad()
     {
-        $filePath = 'sql/ratemovies.sql';
-        $message = "";
-        if (file_exists($filePath)) {
-            $sqlContent = file_get_contents($filePath);
-
-            try {
-                $this->connection->exec($sqlContent);
-                $message = 'Archivo SQL importado correctamente.';
-            } catch (\Exception $e) {
-                $message = 'Error al importar el archivo SQL: ' . $e->getMessage();
-            }
-        } else {
-            $message = 'El archivo SQL no existe.';
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('perfil');
         }
-        var_dump($message);die;
+        $siguiendo = $this->getUser()->getSiguiendo();
+        $users = [$user];
+        foreach ($siguiendo as $usuario) {
+            $users[] = $usuario->getFollowing();
+        }
+        $criticas = $this->service->getCriticasDeUsuarios($users);
+        $criticas = new ArrayCollection($criticas);
+        $criticas = $this->service->hasMyOwnLike($criticas, $user);
+
+        return $this->render('comunidad.html.twig', ['criticas' => $criticas]);
     }
     #[Route('/catalogo/{id}/{nombre}', name: 'contenido')]
     public function contenido(int $id)
@@ -82,12 +83,19 @@ class RatemoviesController extends AbstractController
         if (!$contenido) {
             return $this->redirectToRoute('home');
         }
-        
-        $recomendados = $this->service->getRecommendedByGenre($id, $contenido->getGeneros());
+
+        $recomendados = $this->service->getRecommendedByGenre($contenido);
         $criticas = $contenido->getCriticas();
         $user = $this->getUser();
 
-        if($user)$criticas = $this->service->hasMyOwnLike($criticas, $user);
+        if ($user) {
+            $criticas = $this->service->getCriticasOrderByFecha($contenido);
+            $criticas = new ArrayCollection($criticas);
+            $criticas = $this->service->hasMyOwnLike($criticas, $user);
+            $this->service->addVisita($contenido, $user);
+            $esFavorito = $this->service->isContenidoFavorito($contenido, $user);
+            $contenido->setOwnlike($esFavorito);
+        }
 
         $valoraciones = $contenido->getValoraciones();
         $myScore = 0;
@@ -111,23 +119,76 @@ class RatemoviesController extends AbstractController
             $errorMessages = $session->getFlashBag()->get('error');
             return $this->render('login.html.twig', array("errorMessages" => $errorMessages));
         }
+        $criticas = $this->getUser()->getCriticas();
+        $user = $this->getUser();
+        $criticas = $this->service->getCriticasByUserOrderByFecha($user);
+        $criticas = new ArrayCollection($criticas);
+        $criticas = $this->service->hasMyOwnLike($criticas, $user);
+        $following = $user->getSiguiendo();
+        $followers = $user->getSeguidores();
+        $favoritos = $user->getFavoritos();
+        return $this->render('perfil.html.twig', ['usuario' => $this->getUser(), 'followings' => $following, 'followers' => $followers, 'favoritos' => $favoritos, 'criticas' => $criticas]);
     }
     #[Route('/perfil/{username}', name: 'usuario')]
-    public function usuario($username = 0)
+    public function usuario($username)
     {
+        $myUser = $this->getUser();
+        $user = $this->service->getUserByUsername($username);
+        if (!$user || ($user && $myUser && $user->getId() == $myUser->getId())) {
+            return $this->redirectToRoute('perfil');
+        }
+        $criticas = $user->getCriticas();
+        $es_seguido = null;
+        if ($myUser) {
+            $criticas = $this->service->hasMyOwnLike($criticas, $myUser);
+            $es_seguido = $this->service->hasMyFollow($user, $myUser);
+        }
+        $following = $user->getSiguiendo();
+        $followers = $user->getSeguidores();
+        $favoritos = $user->getFavoritos();
+        return $this->render('perfil.html.twig', ['usuario' => $user, 'followings' => $following, 'followers' => $followers, 'favoritos' => $favoritos, 'criticas' => $criticas, 'es_seguido' => $es_seguido]);
     }
     #[Route('/nuevo_contenido', name: 'nuevo_contenido')]
     public function admin()
     {
+        $user = $this->getUser();
+        if ($user && $this->isGranted('ROLE_ADMIN')) {
+            $generos = $this->service->getAllGeneros();
+            $actores = $this->service->getAllActor();
+            return $this->render('nuevo_contenido.html.twig', ["generos" => $generos, "error" => false, 'actores' => $actores]);
+        } else {
+            return $this->redirectToRoute('home');
+        }
     }
     #[Route('/administracion', name: 'administracion')]
     public function administracion()
     {
+        // $filePath = 'sql/ratemovies.sql';
+        // $message = "";
+        // if (file_exists($filePath)) {
+        //     $sqlContent = file_get_contents($filePath);
+
+        //     try {
+        //         $this->connection->exec($sqlContent);
+        //         $message = 'Archivo SQL importado correctamente.';
+        //     } catch (\Exception $e) {
+        //         $message = 'Error al importar el archivo SQL: ' . $e->getMessage();
+        //     }
+        // } else {
+        //     $message = 'El archivo SQL no existe.';
+        // }
+        // var_dump($message);
+        // die;
+        $user = $this->getUser();
+        if ($user && $this->isGranted('ROLE_SUPERADMIN')) {
+            return $this->render('administrador.html.twig');
+        } else {
+            return $this->redirectToRoute('home');
+        }
     }
     #[Route('/logout', name: 'logout')]
     public function logout()
     {
-
         return $this->redirectToRoute('perfil');
     }
 }

@@ -32,7 +32,7 @@ class Comentario
     #[ORM\OneToMany(mappedBy: 'comentario', targetEntity: Like::class)]
     private Collection $likes;
 
-    private ?Boolean $myLike;
+    private $myLike;
 
     public function __construct()
     {

@@ -20,7 +20,6 @@ $("#genero").on("keyup", function (event) {
   if (event.key === "," || event.key === " ") {
     var genero = $(this).val().replace(",", "");
     genero = genero.trim();
-    console.log(genero);
     $(this).val("");
     if (genero.length > 0) {
       genero = genero[0].toUpperCase() + genero.substring(1);
@@ -37,7 +36,6 @@ $("#reparto").on("keyup", function (event) {
   if (event.key === ",") {
     var actor = $(this).val().replace(",", "");
     actor = actor.trim();
-    console.log(actor);
     $(this).val("");
     if (actor.length > 0) {
       actor = actor[0].toUpperCase() + actor.substring(1);

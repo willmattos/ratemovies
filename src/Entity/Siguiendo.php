@@ -13,11 +13,19 @@ class Siguiendo
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'siguiendo')]
     private ?User $follower = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'seguidores')]
     private ?User $following = null;
+
+   
+
+    // #[ORM\ManyToOne]
+    // private ?User $follower = null;
+
+    // #[ORM\ManyToOne]
+    // private ?User $following = null;
 
     public function getId(): ?int
     {
@@ -47,4 +55,5 @@ class Siguiendo
 
         return $this;
     }
+
 }

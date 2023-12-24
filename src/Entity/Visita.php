@@ -14,30 +14,18 @@ class Visita
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $contador = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fecha = null;
 
     #[ORM\ManyToOne]
     private ?Contenido $contenido = null;
 
+    #[ORM\ManyToOne]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getContador(): ?int
-    {
-        return $this->contador;
-    }
-
-    public function setContador(?int $contador): static
-    {
-        $this->contador = $contador;
-
-        return $this;
     }
 
     public function getFecha(): ?\DateTimeInterface
@@ -60,6 +48,18 @@ class Visita
     public function setContenido(?Contenido $contenido): static
     {
         $this->contenido = $contenido;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

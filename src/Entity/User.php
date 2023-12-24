@@ -52,10 +52,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Favorito::class)]
     private Collection $favoritos;
 
+    #[ORM\OneToMany(mappedBy: 'follower', targetEntity: Siguiendo::class)]
+    private Collection $siguiendo;
+
+    #[ORM\OneToMany(mappedBy: 'following', targetEntity: Siguiendo::class)]
+    private Collection $seguidores;
+
+
     public function __construct()
     {
         $this->criticas = new ArrayCollection();
         $this->favoritos = new ArrayCollection();
+        $this->siguiendo = new ArrayCollection();
+        $this->seguidores = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -302,4 +311,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Siguiendo>
+     */
+    public function getSiguiendo(): Collection
+    {
+        return $this->siguiendo;
+    }
+
+    public function addSiguiendo(Siguiendo $siguiendo): static
+    {
+        if (!$this->siguiendo->contains($siguiendo)) {
+            $this->siguiendo->add($siguiendo);
+            $siguiendo->setFollower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSiguiendo(Siguiendo $siguiendo): static
+    {
+        if ($this->siguiendo->removeElement($siguiendo)) {
+            // set the owning side to null (unless already changed)
+            if ($siguiendo->getFollower() === $this) {
+                $siguiendo->setFollower(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Siguiendo>
+     */
+    public function getSeguidores(): Collection
+    {
+        return $this->seguidores;
+    }
+
+    public function addSeguidore(Siguiendo $seguidore): static
+    {
+        if (!$this->seguidores->contains($seguidore)) {
+            $this->seguidores->add($seguidore);
+            $seguidore->setFollowing($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeguidore(Siguiendo $seguidore): static
+    {
+        if ($this->seguidores->removeElement($seguidore)) {
+            // set the owning side to null (unless already changed)
+            if ($seguidore->getFollowing() === $this) {
+                $seguidore->setFollowing(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
