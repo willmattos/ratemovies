@@ -16,8 +16,11 @@ const userfoto = "{{ asset('iconos/default-user.jpg') }}";{% endif %}{% endif %}
 <script src="{{asset("js/critica.js")}}" defer></script><script src="{{asset("js/comunidad.js")}}" defer></script>{% endblock %}{% block body %}
 <section>
 	<div class="seccion">
-		<div class="titulo">Criticas recientes</div>
+		<div class="titulo">Críticas recientes</div>
 		<div class="criticas">
+		{% if criticas is empty %}
+			<p>Empieza a seguir a gente para ver sus críticas</p>
+			{% else %}
 			{% for critica in criticas %}
 				<div class="critica">
 					<div class="comentario">
@@ -105,6 +108,7 @@ const userfoto = "{{ asset('iconos/default-user.jpg') }}";{% endif %}{% endif %}
 					{% endfor %}
 				</div>
 			{% endfor %}
+		{% endif %}
 		</div>
 	</div>
 </section>{% endblock %}

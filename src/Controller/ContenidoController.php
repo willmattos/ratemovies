@@ -139,9 +139,9 @@ class ContenidoController extends AbstractController
     public function crearContenido(SessionInterface $session)
     {
         $user = $this->getUser();
-        if ($user && $this->isGranted('ROLE_ADMIN')) return $this->redirectToRoute('home');
-
-        if (isset($_POST['tipo'], $_POST['titulo'], $_POST['alias'], $_POST['fecha'], $_POST['descripcion']) && strlen(trim($_POST['titulo'])) && strlen(trim($_POST['descripcion']))) {
+        if (!$user || ($user && !$this->isGranted('ROLE_ADMIN'))) return $this->redirectToRoute('home');
+    
+        if (isset($_POST['tipo'], $_POST['titulo'], $_POST['alias'], $_POST['fecha'], $_POST['descripcion']) &&strlen(trim($_POST['fecha'])) &&strlen(trim($_POST['titulo'])) && strlen(trim($_POST['descripcion']))) {
             $datos = ['titulo' => ucfirst(trim($_POST['titulo'])), 'alias' => ucfirst(trim($_POST['alias'])), 'descripcion' => strlen($_POST['descripcion']) ? $_POST['descripcion'] : null, 'estreno' => strlen($_POST['fecha']) >= 10  ? new \DateTime($_POST['fecha']) : null, 'serie' => $_POST['tipo'] ? 0 : 1];
             $contenido = $this->service->addContenido($datos);
             $this->service->addObject($contenido);
@@ -164,7 +164,7 @@ class ContenidoController extends AbstractController
             $this->service->updateObject();
         }
 
-        return $this->redirectToRoute('contenido', ['codigo' => $contenido->getId(), 'nombre' => $contenido->getTitulo()]);
+        return $this->redirectToRoute('contenido', ['id' => $contenido->getId(), 'nombre' => $contenido->getTitulo()]);
     }
     #[Route('/eliminarContenido', name: 'eliminarContenido')]
     public function eliminarContenido()

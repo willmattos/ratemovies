@@ -169,23 +169,20 @@ class Service
 			$filtro['fecha'] = $filter['fecha'];
 			$queryBuilder->andwhere($queryBuilder->expr()->in('SUBSTRING(c.estreno, 1, 4)', $filter['fecha']));
 		}
+		$order = [];
 		if (isset($filter['ordenar'])) {
 			$filtro['ordenar'][] = $filter['ordenar'];
 			$order = $filter['ordenar'] ? 'ASC' : 'DESC';
-			$queryBuilder->orderBy('c.estreno', $order);
+			// $queryBuilder->orderBy('c.estreno', $order);
+			$order = ['estreno' => $order];
 		}
-		if (isset($filter['ordenar'])) {
-			$order = $filter['ordenar'] ? 'ASC' : 'DESC';
-			$queryBuilder->orderBy('c.estreno', $order);
-		}
-
 
 		$results = $queryBuilder->getQuery()->getResult();
 		$ids = [];
 		foreach ($results as $key) {
 			$ids[] = $key[1];
 		}
-		$contenido = $this->repository_contenido->findBy(['id' => $ids]);
+		$contenido = $this->repository_contenido->findBy(['id' => $ids],$order);
 		return ['contenido' => $contenido, 'filtro' =>  $filtro];
 	}
 	public function getRecommendedByGenre(Contenido $contenido)
@@ -269,6 +266,9 @@ class Service
 		$user->setRol(0);
 		$user->setActivado(0);
 		$user->setBloquear(0);
+		$caducidad = new \DateTime();
+		$caducidad = $caducidad->add(new \DateInterval('P1D'));
+		$user->setCaducidad($caducidad);
 		do {
 			$recuperacion = rand(1, 2147483647);
 		} while ($this->repository_user->findOneBy(['recuperar' => $recuperacion]));
@@ -298,8 +298,27 @@ class Service
 		$email = (new Email())
 			->from(new Address('willmattos.services@gmail.com', 'Ratemovies'))
 			->to($user_email)
-			->subject('Activar cuenta')
-			->html("<a href=\"$url\">Activa tu cuenta</a>");
+			->subject('Bienvenido a Ratemovies')
+			->html("<!DOCTYPE html>
+			<html lang='en'>
+			<head>
+			  <meta charset='UTF-8'>
+			  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+			  <title>Activación de Usuario</title>
+			</head>
+			<body>
+			  <div style='max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;'>
+			  <h2>Bienvenido a Ratemovies</h2>
+				<p>Gracias por registrarte en Ratemovies. Para activar tu cuenta, haz clic en el siguiente enlace:</p>
+				<p><a href=\"$url\" style='display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: #fff; text-decoration: none; border-radius: 5px;'>Activar Usuario</a></p>
+				<p>Si no puedes hacer clic en el enlace, cópialo y pégalo en la barra de direcciones de tu navegador:</p>
+				<p>$url</p>
+				<p>Este enlace es válido por 24 horas.</p>
+				<p>Gracias,<br>willmattos.c@gmail.com</p>
+			  </div>
+			</body>
+			</html>");
+
 
 		return $email;
 	}
@@ -312,6 +331,9 @@ class Service
 		} while ($this->repository_user->findOneBy(['recuperar' => $recuperacion]));
 
 		$user->setRecuperar($recuperacion);
+		$caducidad = new \DateTime();
+		$caducidad = $caducidad->add(new \DateInterval('P1D'));
+		$user->setCaducidad($caducidad);
 
 		$url = $this->url_origin($SERVER);
 		$url = $url . "/recuperarCuenta/$recuperacion";
@@ -319,8 +341,28 @@ class Service
 		$email = (new Email())
 			->from(new Address('willmattos.services@gmail.com', 'Ratemovies'))
 			->to($user_email)
-			->subject('Recupera tu cuenta')
-			->html("<a href=\"$url\">Recuperar tu cuenta</a>");
+			->subject('Recuperación de Cuenta - Ratemovies')
+			->html("<!DOCTYPE html>
+			<html lang='en'>
+			<head>
+			  <meta charset='UTF-8'>
+			  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+			  <title>Recuperación de Cuenta - Ratemovies</title>
+			</head>
+			<body>
+			  <div style='max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;'>
+				<h2>Recuperación de Cuenta - Ratemovies</h2>
+				<p>Hemos recibido una solicitud para recuperar tu cuenta en Ratemovies. Si no has realizado esta solicitud, puedes ignorar este mensaje.</p>
+				<p>Para restablecer tu cuenta, haz clic en el siguiente enlace:</p>
+				<p><a href=\"$url\" style='display: inline-block; padding: 10px 20px; background-color: #007BFF; color: #fff; text-decoration: none; border-radius: 5px;'>Restablecer Cuenta</a></p>
+				<p>Si no puedes hacer clic en el enlace, cópialo y pégalo en la barra de direcciones de tu navegador:</p>
+				<p>$url</p>
+				<p>Este enlace es válido por 24 horas.</p>
+				<p>Gracias,<br>willmattos.c@gmail.com</p>
+			  </div>
+			</body>
+			</html>
+			");
 
 		return $email;
 	}

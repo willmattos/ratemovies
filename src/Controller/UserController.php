@@ -2,18 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Actor;
 use App\Entity\User;
-use App\Repository\ActorRepository;
 use App\Service\Service;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\AST\Functions\LowerFunction;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,7 +29,7 @@ class UserController extends AbstractController
     public function identification(SessionInterface $session, UserPasswordHasherInterface $passwordHasher)
     {
         if (isset($_POST['_username'], $_POST['_password'])) {
-            $username = $_POST['_username'];
+            $username = trim(strtolower($_POST['_username']));
             $password = $_POST['_password'];
             $user_email = $this->service->getUserByEmail($username);
             $user_username = $this->service->getUserByUsername($username);
@@ -50,7 +45,7 @@ class UserController extends AbstractController
                     $this->setToken($user);
                 }
             } else {
-                $session->getFlashBag()->add('error', "Usuario no encontrada");
+                $session->getFlashBag()->add('error', "Usuario no encontrado");
             }
         }
         return $this->redirectToRoute('perfil');
@@ -59,7 +54,7 @@ class UserController extends AbstractController
     public function recuperarCuenta(MailerInterface $mailer, SessionInterface $session)
     {
         if (isset($_POST['_username'])) {
-            $username = $_POST['_username'];
+            $username = trim(strtolower($_POST['_username']));
             $user_email = $this->service->getUserByEmail($username);
             $user_username = $this->service->getUserByUsername($username);
             if ($user_email || $user_username) {
@@ -69,7 +64,7 @@ class UserController extends AbstractController
                 $this->service->updateObject();
                 $session->getFlashBag()->add('error', "Revisa tu correo: " . $user->getEmail());
             } else {
-                $session->getFlashBag()->add('error', "Usuario no encontrada");
+                $session->getFlashBag()->add('error', "Usuario no encontrado");
             }
         }
         return $this->redirectToRoute('perfil');
@@ -77,14 +72,15 @@ class UserController extends AbstractController
     #[Route('/crearUsuario', name: 'crearUsuario')]
     public function crearUsuario(MailerInterface $mailer, UserPasswordHasherInterface $passwordHasher, SessionInterface $session)
     {
+
         if (isset($_POST['_username'], $_POST['usuario'], $_POST['_password'])) {
-            $email = preg_replace('/\s+/', '', $_POST['_username']);
-            $email = strtolower($email);
-            $username = substr(preg_replace('/\s+/', '', $_POST['usuario']), 0, 12);
+            $email = trim(strtolower($_POST['_username']));
+            $username = trim(strtolower($_POST['usuario']));
+            $username = substr($username, 0, 12);
             $password = $_POST['_password'];
             $user_email = $this->service->getUserByEmail($email);
             $user_username = $this->service->getUserByUsername($username);
-            if (!($user_email && $user_username)) {
+            if (!$user_email && !$user_username) {
                 $user = $this->service->addUser($email, $username);
                 $password = $passwordHasher->hashPassword($user, $password);
                 $user->setPassword($password);
@@ -92,18 +88,18 @@ class UserController extends AbstractController
                 $email = $this->service->emailCreateUser($_SERVER, $user);
                 $mailer->send($email);
                 $session->getFlashBag()->add('error', "Revisa tu correo: " . $user->getEmail());
+            } else if ($user_email) {
+                $session->getFlashBag()->add('error', "Ya existe una cuenta con " . $email);
             } else {
-                if ($user_email) {
-                    $session->getFlashBag()->add('error', "Ya existe una cuenta con " . $email);
-                } else {
-                    $session->getFlashBag()->add('error', "Ya existe una cuenta con " . $username);
-                }
+                $session->getFlashBag()->add('error', "Ya existe una cuenta con " . $username);
             }
         }
         return $this->redirectToRoute('perfil');
     }
-    #[Route('/recuperarClave/{codigo}', name: 'recuperarClave')]
-    public function recuperarClave($codigo, UserPasswordHasherInterface $passwordHasher)
+
+
+    #[Route('/recuperarCuenta/{codigo}', name: 'recuperarClave')]
+    public function recuperarClave($codigo, UserPasswordHasherInterface $passwordHasher, SessionInterface $session)
     {
         $user = $this->getUser();
         if ($user && isset($_POST['_password'])) {
@@ -113,11 +109,15 @@ class UserController extends AbstractController
             $this->service->updateObject();
         } else if (!$user) {
             $user = $this->service->getUserByRecuperar($codigo);
-            $user->setRecuperar(0);
-            $user->setActivado(1);
-            $this->setToken($user);
-            $this->service->updateObject();
-            return $this->render('cambiarClave.html.twig');
+            if (new DateTime() < $user->getCaducidad()) {
+                $user->setRecuperar(0);
+                $user->setActivado(1);
+                $this->setToken($user);
+                $this->service->updateObject();
+                return $this->render('cambiarClave.html.twig');
+            } else {
+                $session->getFlashBag()->add('error', "Enlace caducado");
+            }
         }
         return $this->redirectToRoute('perfil');
     }
@@ -125,7 +125,7 @@ class UserController extends AbstractController
     public function activarCuenta($codigo)
     {
         $user = $this->service->getUserByRecuperar($codigo);
-        if ($user) {
+        if ($user && new DateTime() < $user->getCaducidad()) {
             $user->setRecuperar(0);
             $user->setActivado(1);
             $this->setToken($user);
@@ -215,8 +215,8 @@ class UserController extends AbstractController
         $user = $request->request->get('codigo');
         $tipo = $request->request->get('tipo');
         $user = $this->service->getUserById($user);
-        if($user){
-            $user->setRol($tipo ? 2: 1);
+        if ($user) {
+            $user->setRol($tipo ? 2 : 1);
             $this->service->updateObject();
             $js['respuesta'] = true;
             $js['tipo'] = $user->getRol();
@@ -231,7 +231,7 @@ class UserController extends AbstractController
         if (!$user ||  !$this->isGranted('ROLE_ADMIN')) return new JSONResponse($js);
         $user = $request->request->get('codigo');
         $user = $this->service->getUserById($user);
-        if($user){
+        if ($user) {
             $user->setRol(0);
             $this->service->updateObject();
             $js['respuesta'] = true;
@@ -246,7 +246,7 @@ class UserController extends AbstractController
         if (!$user) return new JSONResponse($js);
         $js['actualizado'] = true;
         $file = $request->files->get('file');
-        $file_name = $this->guardarFoto($user,$file);
+        $file_name = $this->guardarFoto($user, $file);
         $user->setFoto($file_name);
         $this->service->updateObject();
         return new JsonResponse($js);
@@ -258,7 +258,8 @@ class UserController extends AbstractController
         $this->container->get('security.token_storage')->setToken($token);
         //$this->container->get('session')->set('_security_main', serialize($token));
     }
-    private function guardarFoto(User $user,$file){
+    private function guardarFoto(User $user, $file)
+    {
         $filesystem = new Filesystem();
         $folderPath = $this->getParameter('kernel.project_dir') . '/public/Usuario/u' . $user->getId() . '/';
         if (!$filesystem->exists($folderPath)) {

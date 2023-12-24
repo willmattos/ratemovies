@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -57,6 +58,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'following', targetEntity: Siguiendo::class)]
     private Collection $seguidores;
+
+    #[ORM\Column(type: Types::DATETIMETZ_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $caducidad = null;
 
 
     public function __construct()
@@ -368,6 +372,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $seguidore->setFollowing(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCaducidad(): ?\DateTimeInterface
+    {
+        return $this->caducidad;
+    }
+
+    public function setCaducidad(?\DateTimeInterface $caducidad): static
+    {
+        $this->caducidad = $caducidad;
 
         return $this;
     }

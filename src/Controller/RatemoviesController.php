@@ -12,16 +12,19 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\DBAL\Connection;
 use phpDocumentor\Reflection\Types\Integer;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RatemoviesController extends AbstractController
 {
     private $service;
     private $connection;
+    private $urlGenerator;
 
-    public function __construct(Service $service, Connection $connection)
+    public function __construct(Service $service, Connection $connection, UrlGeneratorInterface $urlGenerator)
     {
         $this->service = $service;
         $this->connection = $connection;
+        $this->urlGenerator = $urlGenerator;
     }
 
     #[Route('/', name: 'home')]
@@ -55,6 +58,7 @@ class RatemoviesController extends AbstractController
             $contents = $result['contenido'];
         } else {
             $contents = $this->service->getAllContent();
+            shuffle($contents);
         }
         return $this->render('catalogo.html.twig', ['generos' => $genres, 'fecha' => $years, 'contenidos' => $contents, 'filtros' => json_encode($filtros), 'titulo_buscar' => $filtros['titulo']]);
     }
@@ -163,6 +167,16 @@ class RatemoviesController extends AbstractController
     #[Route('/administracion', name: 'administracion')]
     public function administracion()
     {
+        $user = $this->getUser();
+        if ($user && $this->isGranted('ROLE_SUPERADMIN')) {
+            return $this->render('administrador.html.twig');
+        } else {
+            return $this->redirectToRoute('home');
+        }
+    }
+    #[Route('/logout', name: 'logout')]
+    public function logout()
+    {
         // $filePath = 'sql/ratemovies.sql';
         // $message = "";
         // if (file_exists($filePath)) {
@@ -179,16 +193,6 @@ class RatemoviesController extends AbstractController
         // }
         // var_dump($message);
         // die;
-        $user = $this->getUser();
-        if ($user && $this->isGranted('ROLE_SUPERADMIN')) {
-            return $this->render('administrador.html.twig');
-        } else {
-            return $this->redirectToRoute('home');
-        }
-    }
-    #[Route('/logout', name: 'logout')]
-    public function logout()
-    {
         return $this->redirectToRoute('perfil');
     }
 }

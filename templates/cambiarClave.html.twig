@@ -2,13 +2,18 @@
 {% block title %}Cambiar Contraseña
 {% endblock %}
 {% block css %}
-	<link rel="stylesheet" href="{{ asset('css/login.css') }}"></link>{% endblock %}{% block javascripts %}
+	<link rel="stylesheet" href="{{ asset('css/login.css') }}"></link>
+	<style>
+	form h1{
+		    text-align: center;
+	}
+	</style>{% endblock %}{% block javascripts %}
 <script src="{{asset('js/cambiarClave.js')}}" defer></script>{% endblock %}{% block body %}
 <section>
 	<form action="{{path('recuperarClave',{'codigo':0})}}" onsubmit="return comprobarClave()" method="post">
 		<h1>Cambia tu contraseña</h1>
 		<p>¡Vamos, estás a solo unos clics de tener acceso nuevamente,
-			{{app.user.getUsuario()}}!
+			{{app.user.getUsername()}}!
 		</p>
 		<div class="credenciales">
 			<label for="_password">Nueva contraseña:</label>

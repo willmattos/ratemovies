@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20231223160006 extends AbstractMigration
+final class Version20231224133033 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -24,7 +24,7 @@ final class Version20231223160006 extends AbstractMigration
         $this->addSql('CREATE TABLE comentario (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER DEFAULT NULL, critica_id INTEGER DEFAULT NULL, comentario VARCHAR(255) DEFAULT NULL, fecha DATETIME NOT NULL, CONSTRAINT FK_4B91E702A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_4B91E7023B7FACB5 FOREIGN KEY (critica_id) REFERENCES critica (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_4B91E702A76ED395 ON comentario (user_id)');
         $this->addSql('CREATE INDEX IDX_4B91E7023B7FACB5 ON comentario (critica_id)');
-        $this->addSql('CREATE TABLE contenido (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, titulo VARCHAR(255) NOT NULL, alias VARCHAR(255) DEFAULT NULL, descripcion VARCHAR(255) DEFAULT NULL, estreno DATE NOT NULL, poster VARCHAR(255) NOT NULL, portada VARCHAR(255) DEFAULT NULL, serie INTEGER DEFAULT NULL)');
+        $this->addSql('CREATE TABLE contenido (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, titulo VARCHAR(255) NOT NULL, alias VARCHAR(255) DEFAULT NULL, descripcion VARCHAR(255) DEFAULT NULL, estreno DATE NOT NULL, poster VARCHAR(255) DEFAULT NULL, portada VARCHAR(255) DEFAULT NULL, serie INTEGER DEFAULT NULL)');
         $this->addSql('CREATE TABLE critica (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER DEFAULT NULL, contenido_id INTEGER DEFAULT NULL, comentario VARCHAR(255) DEFAULT NULL, fecha DATETIME NOT NULL, CONSTRAINT FK_22C49E3EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_22C49E3E7FDA517C FOREIGN KEY (contenido_id) REFERENCES contenido (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_22C49E3EA76ED395 ON critica (user_id)');
         $this->addSql('CREATE INDEX IDX_22C49E3E7FDA517C ON critica (contenido_id)');
@@ -46,7 +46,7 @@ final class Version20231223160006 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_F372987AAC24F853 ON siguiendo (follower_id)');
         $this->addSql('CREATE INDEX IDX_F372987A1816E3A3 ON siguiendo (following_id)');
         $this->addSql('CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(180) NOT NULL, username VARCHAR(180) NOT NULL, roles CLOB NOT NULL --(DC2Type:json)
-        , rol INTEGER NOT NULL, password VARCHAR(255) NOT NULL, recuperar INTEGER NOT NULL, activado INTEGER NOT NULL, bloquear INTEGER NOT NULL, foto VARCHAR(255) DEFAULT NULL)');
+        , rol INTEGER NOT NULL, password VARCHAR(255) NOT NULL, recuperar INTEGER NOT NULL, activado INTEGER NOT NULL, bloquear INTEGER NOT NULL, foto VARCHAR(255) DEFAULT NULL, caducidad DATETIME DEFAULT NULL)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON user (email)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649F85E0677 ON user (username)');
         $this->addSql('CREATE TABLE valora (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER DEFAULT NULL, contenido_id INTEGER DEFAULT NULL, puntuacion INTEGER DEFAULT NULL, CONSTRAINT FK_DD2C9F9EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_DD2C9F9E7FDA517C FOREIGN KEY (contenido_id) REFERENCES contenido (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
