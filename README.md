@@ -21,10 +21,10 @@
 
 <ol>
   <li>Clona el repositorio:</li>
-  <pre><code>git clone https://github.com/tuusuario/tuproyecto.git</code></pre>
+  <pre><code>git clone https://github.com/willmattos/ratemovies.git</code></pre>
 
   <li>Accede al directorio del proyecto:</li>
-  <pre><code>cd tuproyecto</code></pre>
+  <pre><code>cd ratemovies</code></pre>
 
   <li>Instala las dependencias de Composer:</li>
   <pre><code>composer install</code></pre>
