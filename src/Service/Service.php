@@ -124,7 +124,7 @@ class Service
 		$results = $this->repository_contenido
 			->createQueryBuilder('c')
 			->select("DISTINCT(SUBSTRING(c.estreno, 1, 4)) AS year")
-			->orderBy('c.estreno', 'DESC')
+			->orderBy('year', 'DESC')
 			->getQuery()
 			->getResult();
 		$years = [];
