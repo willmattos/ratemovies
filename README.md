@@ -2,6 +2,13 @@
 
 <p>Esta aplicación te brinda la oportunidad de explorar el mundo del cine a través de la escritura de reseñas de películas, al mismo tiempo que funciona como una mini red social que fomenta la interacción entre usuarios.</p>
 
+<p align="center">
+  Creado por: <a href="https://www.linkedin.com/in/wiillmattos/">Will Mattos</a>
+</p>
+<p align="center">
+  Visita la página en: <a href="http://54.76.44.134/">Ratemovies</a>
+</p>
+
 <h2>Requisitos</h2>
 
 <ul>
