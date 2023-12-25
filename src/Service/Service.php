@@ -314,7 +314,9 @@ class Service
 				<p>Si no puedes hacer clic en el enlace, cópialo y pégalo en la barra de direcciones de tu navegador:</p>
 				<p>$url</p>
 				<p>Este enlace es válido por 24 horas.</p>
-				<p>Gracias,<br>willmattos.c@gmail.com</p>
+				<p>¡Gracias por ser parte de Ratemovies!</p>
+				<p>Para cualquier consulta, no dudes en contactarnos a willmattos.c@gmail.com</p>
+				<p>¿Interesado en nuestro proyecto Symfony? ¡Visítalo <a href='https://github.com/willmattos/ratemovies' target='_blank'>aquí</a>!</p>
 			  </div>
 			</body>
 			</html>");
@@ -358,7 +360,9 @@ class Service
 				<p>Si no puedes hacer clic en el enlace, cópialo y pégalo en la barra de direcciones de tu navegador:</p>
 				<p>$url</p>
 				<p>Este enlace es válido por 24 horas.</p>
-				<p>Gracias,<br>willmattos.c@gmail.com</p>
+				<p>¡Gracias por ser parte de Ratemovies!</p>
+				<p>Para cualquier consulta, no dudes en contactarnos a willmattos.c@gmail.com</p>
+				<p>¿Interesado en nuestro proyecto Symfony? ¡Visítalo <a href='https://github.com/willmattos/ratemovies' target='_blank'>aquí</a>!</p>
 			  </div>
 			</body>
 			</html>
