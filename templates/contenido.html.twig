@@ -49,16 +49,17 @@ const userfoto = "{{ asset('iconos/default-user.jpg') }}";{% endif %}{% endif %}
 		<div class="descripcion">
 			{{contenido.getDescripcion()|nl2br|escape}}
 		</div>
-		<div class='contenido_generos'>
-			<div>Géneros</div>
-			<ul>
-				{% for item in contenido.getGeneros() %}
-					<li>{{item.getGenero().getNombre()}}</li>
-				{% endfor %}
-			</ul>
-		</div>
-
-		{% if contenido.getReparto() is not null %}
+		
+			<div class='contenido_generos'>
+				<div>Géneros</div>
+				<ul>
+					{% for item in contenido.getGeneros() %}
+						<li>{{item.getGenero().getNombre()}}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		
+		{% if contenido.getReparto() is not empty %}
 			<div class='contenido_generos'>
 				<div>Reparto</div>
 				<ul>

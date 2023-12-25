@@ -179,4 +179,14 @@ class RatemoviesController extends AbstractController
     {
         return $this->redirectToRoute('perfil');
     }
+    // #[Route('/agregarDatos', name: 'agregarDatos')]
+    // public function agregarDatos()
+    // {
+    //     $filePath = 'sql/ratemovies.sql';
+    //     if (file_exists($filePath)) {
+    //         $sqlContent = file_get_contents($filePath);
+    //         $this->connection->exec($sqlContent);
+    //     }
+    //     return $this->redirectToRoute('home');
+    // }
 }

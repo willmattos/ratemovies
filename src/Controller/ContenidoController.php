@@ -145,7 +145,7 @@ class ContenidoController extends AbstractController
             $datos = ['titulo' => ucfirst(trim($_POST['titulo'])), 'alias' => ucfirst(trim($_POST['alias'])), 'descripcion' => strlen($_POST['descripcion']) ? $_POST['descripcion'] : null, 'estreno' => strlen($_POST['fecha']) >= 10  ? new \DateTime($_POST['fecha']) : null, 'serie' => $_POST['tipo'] ? 0 : 1];
             $contenido = $this->service->addContenido($datos);
             $this->service->addObject($contenido);
-
+            $this->eliminarArchivo($contenido);
             if (isset($_FILES['poster']) && strlen($_FILES['poster']['name'])) {
                 $this->guardarArchivo($contenido->getId(), $_FILES['poster'], 1);
                 $contenido->setPoster($_FILES['poster']['name']);
