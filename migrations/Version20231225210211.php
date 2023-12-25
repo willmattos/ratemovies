@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20231225164843 extends AbstractMigration
+final class Version20231225210211 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,9 +21,9 @@ final class Version20231225164843 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE actor (id INT AUTO_INCREMENT NOT NULL, nombre VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE comentario (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, critica_id INT DEFAULT NULL, comentario VARCHAR(255) DEFAULT NULL, fecha DATETIME NOT NULL, INDEX IDX_4B91E702A76ED395 (user_id), INDEX IDX_4B91E7023B7FACB5 (critica_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE contenido (id INT AUTO_INCREMENT NOT NULL, titulo VARCHAR(255) NOT NULL, alias VARCHAR(255) DEFAULT NULL, descripcion VARCHAR(255) DEFAULT NULL, estreno DATE NOT NULL, poster VARCHAR(255) DEFAULT NULL, portada VARCHAR(255) DEFAULT NULL, serie INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE critica (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, contenido_id INT DEFAULT NULL, comentario VARCHAR(255) DEFAULT NULL, fecha DATETIME NOT NULL, INDEX IDX_22C49E3EA76ED395 (user_id), INDEX IDX_22C49E3E7FDA517C (contenido_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE comentario (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, critica_id INT DEFAULT NULL, comentario LONGTEXT DEFAULT NULL, fecha DATETIME NOT NULL, INDEX IDX_4B91E702A76ED395 (user_id), INDEX IDX_4B91E7023B7FACB5 (critica_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE contenido (id INT AUTO_INCREMENT NOT NULL, titulo VARCHAR(255) NOT NULL, alias VARCHAR(255) DEFAULT NULL, descripcion LONGTEXT DEFAULT NULL, estreno DATE NOT NULL, poster VARCHAR(255) DEFAULT NULL, portada VARCHAR(255) DEFAULT NULL, serie INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE critica (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, contenido_id INT DEFAULT NULL, comentario LONGTEXT DEFAULT NULL, fecha DATETIME NOT NULL, INDEX IDX_22C49E3EA76ED395 (user_id), INDEX IDX_22C49E3E7FDA517C (contenido_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE favorito (id INT AUTO_INCREMENT NOT NULL, contenido_id INT DEFAULT NULL, user_id INT DEFAULT NULL, INDEX IDX_881067C77FDA517C (contenido_id), INDEX IDX_881067C7A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE genero_contenido (id INT AUTO_INCREMENT NOT NULL, genero_id INT DEFAULT NULL, contenido_id INT DEFAULT NULL, INDEX IDX_78CCFBAABCE7B795 (genero_id), INDEX IDX_78CCFBAA7FDA517C (contenido_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE generos (id INT AUTO_INCREMENT NOT NULL, nombre VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');

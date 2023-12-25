@@ -17,7 +17,7 @@ class Critica
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comentario = null;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]

@@ -22,7 +22,7 @@ class Contenido
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $alias = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descripcion = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
