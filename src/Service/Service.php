@@ -123,10 +123,10 @@ class Service
 	{
 		$results = $this->repository_contenido
 			->createQueryBuilder('c')
-			->select("SUBSTRING(c.estreno, 1, 4) AS year")
-			->distinct(true)
+			->select("DISTINCT(SUBSTRING(c.estreno, 1, 4)) AS year")
 			->orderBy('c.estreno', 'DESC')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 		$years = [];
 		foreach ($results as $result) {
 			$years[] = $result['year'];
@@ -182,7 +182,7 @@ class Service
 		foreach ($results as $key) {
 			$ids[] = $key[1];
 		}
-		$contenido = $this->repository_contenido->findBy(['id' => $ids],$order);
+		$contenido = $this->repository_contenido->findBy(['id' => $ids], $order);
 		return ['contenido' => $contenido, 'filtro' =>  $filtro];
 	}
 	public function getRecommendedByGenre(Contenido $contenido)
@@ -209,7 +209,7 @@ class Service
 		foreach ($results as $result) {
 			$contentIds[] = $result[1];
 		}
-		$content = $this->repository_contenido->findBy(['id' => $contentIds],[],8);
+		$content = $this->repository_contenido->findBy(['id' => $contentIds], [], 8);
 
 		return $content;
 	}
@@ -617,16 +617,19 @@ class Service
 		$favorito = $this->repository_favorito->findOneBy(['contenido' => $contenido, 'user' => $user]);
 		return $favorito;
 	}
-	public function getCriticasOrderByFecha(Contenido $contenido) {
-		$content = $this->repository_critica->findBy(['contenido' => $contenido],['fecha' => 'DESC']);
+	public function getCriticasOrderByFecha(Contenido $contenido)
+	{
+		$content = $this->repository_critica->findBy(['contenido' => $contenido], ['fecha' => 'DESC']);
 		return $content;
 	}
-	public function getComentariosOrderByFecha(Critica $critica) {
-		$comentarios = $this->repository_comentario->findBy(['critica' => $critica],['fecha' => 'DESC']);
+	public function getComentariosOrderByFecha(Critica $critica)
+	{
+		$comentarios = $this->repository_comentario->findBy(['critica' => $critica], ['fecha' => 'DESC']);
 		return $comentarios;
 	}
-	public function getCriticasByUserOrderByFecha(User $user) {
-		$content = $this->repository_critica->findBy(['user' => $user],['fecha' => 'DESC']);
+	public function getCriticasByUserOrderByFecha(User $user)
+	{
+		$content = $this->repository_critica->findBy(['user' => $user], ['fecha' => 'DESC']);
 		return $content;
 	}
 }
