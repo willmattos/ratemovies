@@ -109,14 +109,16 @@ class UserController extends AbstractController
             $this->service->updateObject();
         } else if (!$user && $codigo) {
             $user = $this->service->getUserByRecuperar($codigo);
-            if (new DateTime() < $user->getCaducidad()) {
-                $user->setRecuperar(0);
-                $user->setActivado(1);
-                $this->setToken($user);
-                $this->service->updateObject();
-                return $this->render('cambiarClave.html.twig');
-            } else {
-                $session->getFlashBag()->add('error', "Enlace caducado");
+            if($user){
+                if (new DateTime() < $user->getCaducidad()) {
+                    $user->setRecuperar(0);
+                    $user->setActivado(1);
+                    $this->setToken($user);
+                    $this->service->updateObject();
+                    return $this->render('cambiarClave.html.twig');
+                } else {
+                    $session->getFlashBag()->add('error', "Enlace caducado");
+                }
             }
         }
         return $this->redirectToRoute('perfil');
