@@ -13,7 +13,7 @@ class Reparto
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'repartos')]
+    #[ORM\ManyToOne(inversedBy: 'reparto')]
     private ?Contenido $contenido = null;
 
     #[ORM\ManyToOne]
