@@ -177,22 +177,6 @@ class RatemoviesController extends AbstractController
     #[Route('/logout', name: 'logout')]
     public function logout()
     {
-        // $filePath = 'sql/ratemovies.sql';
-        // $message = "";
-        // if (file_exists($filePath)) {
-        //     $sqlContent = file_get_contents($filePath);
-
-        //     try {
-        //         $this->connection->exec($sqlContent);
-        //         $message = 'Archivo SQL importado correctamente.';
-        //     } catch (\Exception $e) {
-        //         $message = 'Error al importar el archivo SQL: ' . $e->getMessage();
-        //     }
-        // } else {
-        //     $message = 'El archivo SQL no existe.';
-        // }
-        // var_dump($message);
-        // die;
         return $this->redirectToRoute('perfil');
     }
 }
