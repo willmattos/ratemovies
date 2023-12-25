@@ -57,6 +57,8 @@ public function agregarDatos()
     }
     return $this->redirectToRoute('home');
 }</code></pre>
+    <li>Cambiar el nombre de los archivos de prueba</li>
+    <pre><code>cp -r public/Pruebas public/Contenido</code></pre>
     <li>Accede a <a href="http://localhost:8000/agregarDatos">http://localhost:8000/agregarDatos</a></li>
   </ol>
 </ol>
