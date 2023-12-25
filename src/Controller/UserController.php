@@ -107,7 +107,7 @@ class UserController extends AbstractController
             $password = $passwordHasher->hashPassword($user, $password);
             $user->setPassword($password);
             $this->service->updateObject();
-        } else if (!$user) {
+        } else if (!$user && $codigo) {
             $user = $this->service->getUserByRecuperar($codigo);
             if (new DateTime() < $user->getCaducidad()) {
                 $user->setRecuperar(0);
