@@ -49,7 +49,7 @@ const userfoto = "{{ asset('iconos/default-user.jpg') }}";{% endif %}{% endif %}
 		<div class="descripcion">
 			{{contenido.getDescripcion()|nl2br|escape}}
 		</div>
-		
+		{% if contenido.getGeneros() is not empty %}		
 			<div class='contenido_generos'>
 				<div>Géneros</div>
 				<ul>
@@ -58,7 +58,7 @@ const userfoto = "{{ asset('iconos/default-user.jpg') }}";{% endif %}{% endif %}
 					{% endfor %}
 				</ul>
 			</div>
-		
+		{% endif %}
 		{% if contenido.getReparto() is not empty %}
 			<div class='contenido_generos'>
 				<div>Reparto</div>

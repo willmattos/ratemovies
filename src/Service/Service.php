@@ -188,26 +188,29 @@ class Service
 	public function getRecommendedByGenre(Contenido $contenido)
 	{
 		$genreIds = [];
+		$contentIds = [];
 		$id = $contenido->getId();
 		$generos = $contenido->getGeneros();
 		foreach ($generos as $genre) {
 			$genreIds[] = $genre->getGenero()->getId();
 		}
+		if ($genreIds) {
+			$queryBuilder = $this->repository_contenido
+				->createQueryBuilder('c')
+				->select('DISTINCT c.id')
+				->join('c.generos', 'g')
+				->join('g.genero', 'gr');
 
-		$queryBuilder = $this->repository_contenido
-			->createQueryBuilder('c')
-			->select('DISTINCT(c.id)')
-			->join('c.generos', 'g')
-			->join('g.genero', 'gr');
-		$results = $queryBuilder
-			->where($queryBuilder->expr()->in('gr.id', $genreIds))
-			->andWhere('c.id != :id')
-			->setParameter('id', $id)
-			->getQuery()
-			->getResult();
-		$contentIds = [];
-		foreach ($results as $result) {
-			$contentIds[] = $result[1];
+			$results = $queryBuilder
+				->where($queryBuilder->expr()->in('gr.id', ':genreIds'))
+				->andWhere('c.id != :contentId')
+				->setParameter('genreIds', $genreIds)
+				->setParameter('contentId', $id)
+				->getQuery()
+				->getResult();
+			foreach ($results as $result) {
+				$contentIds[] = $result[1];
+			}
 		}
 		$content = $this->repository_contenido->findBy(['id' => $contentIds], [], 8);
 
