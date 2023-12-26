@@ -208,8 +208,11 @@ class Service
 				->setParameter('contentId', $id)
 				->getQuery()
 				->getResult();
+
+			$contentIds = [];
+
 			foreach ($results as $result) {
-				$contentIds[] = $result[1];
+				$contentIds[] = $result['id'];
 			}
 		}
 		$content = $this->repository_contenido->findBy(['id' => $contentIds], [], 8);
