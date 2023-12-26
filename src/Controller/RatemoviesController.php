@@ -180,14 +180,14 @@ class RatemoviesController extends AbstractController
         return $this->redirectToRoute('perfil');
     }
 
-    #[Route('/prueba', name: 'prueba')]
-    public function prueba()
-    {
-        phpinfo();
-        echo ini_get('upload_max_filesize'); // Debería imprimir el valor configurado
-        echo ini_get('post_max_size');
-        die;
-    }
+    // #[Route('/prueba', name: 'prueba')]
+    // public function prueba()
+    // {
+    //     phpinfo();
+    //     echo ini_get('upload_max_filesize'); // Debería imprimir el valor configurado
+    //     echo ini_get('post_max_size');
+    //     die;
+    // }
     // #[Route('/agregarDatos', name: 'agregarDatos')]
     // public function agregarDatos()
     // {
