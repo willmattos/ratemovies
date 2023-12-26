@@ -36,7 +36,7 @@ function crearCritica(e) {
 								<div class="cantidad_reply">
 								</div>
 							</div>
-								<div class="eliminar" data-tipo="1" data-codigo="{{ critica.getCodigo() }}">Eliminar</div>
+								<div class="eliminar" data-tipo="1" data-codigo="{{ critica.getId() }}">Eliminar</div>
 						</div>
 					</div>
 				</div>
