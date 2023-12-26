@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Contenido;
+use App\Entity\Critica;
 use App\Service\Service;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -59,14 +60,38 @@ class ContenidoController extends AbstractController
         $js['respuesta'] = false;
         $user = $this->getUser();
         if (!$user) return new JSONResponse($js);
+
         $datos = ['codigo' => $request->request->get('codigo'), 'tipo' => $request->request->get('tipo')];
         $object = $this->service->getCriticaOrComentarioById($datos, $user);
+
         if ($object) {
+            if ($object instanceof Critica) {
+
+                $comentarios = $object->getComentarios();
+                foreach ($comentarios as $comentario) {
+                    $likes = $comentario->getLikes();
+                    foreach ($likes as $like) {
+                        $this->service->deleteObject($like);
+                    }
+                    $this->service->deleteObject($comentario);
+                }
+                $likes = $object->getLikes();
+                foreach ($likes as $like) {
+                    $this->service->deleteObject($like);
+                }
+            } else {
+                $likes = $object->getLikes();
+                foreach ($likes as $like) {
+                    $this->service->deleteObject($like);
+                }
+            }
             $this->service->deleteObject($object);
             $js['respuesta'] = true;
         }
+
         return new JSONResponse($js);
     }
+
     #[Route('/darLike', name: 'darLike')]
     public function darLike(Request $request)
     {
@@ -140,8 +165,8 @@ class ContenidoController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user || ($user && !$this->isGranted('ROLE_ADMIN'))) return $this->redirectToRoute('home');
-    
-        if (isset($_POST['tipo'], $_POST['titulo'], $_POST['alias'], $_POST['fecha'], $_POST['descripcion']) &&strlen(trim($_POST['fecha'])) &&strlen(trim($_POST['titulo'])) && strlen(trim($_POST['descripcion']))) {
+
+        if (isset($_POST['tipo'], $_POST['titulo'], $_POST['alias'], $_POST['fecha'], $_POST['descripcion']) && strlen(trim($_POST['fecha'])) && strlen(trim($_POST['titulo'])) && strlen(trim($_POST['descripcion']))) {
             $datos = ['titulo' => ucfirst(trim($_POST['titulo'])), 'alias' => ucfirst(trim($_POST['alias'])), 'descripcion' => strlen($_POST['descripcion']) ? $_POST['descripcion'] : null, 'estreno' => strlen($_POST['fecha']) >= 10  ? new \DateTime($_POST['fecha']) : null, 'serie' => $_POST['tipo'] ? 0 : 1];
             $contenido = $this->service->addContenido($datos);
             $this->service->addObject($contenido);
