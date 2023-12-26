@@ -66,24 +66,13 @@ class ContenidoController extends AbstractController
 
         if ($object) {
             if ($object instanceof Critica) {
-
                 $comentarios = $object->getComentarios();
-                foreach ($comentarios as $comentario) {
-                    $likes = $comentario->getLikes();
-                    foreach ($likes as $like) {
-                        $this->service->deleteObject($like);
-                    }
-                    $this->service->deleteObject($comentario);
-                }
+                $this->borrarComentarios($comentarios);
                 $likes = $object->getLikes();
-                foreach ($likes as $like) {
-                    $this->service->deleteObject($like);
-                }
+                $this->borrarLikes($likes);
             } else {
                 $likes = $object->getLikes();
-                foreach ($likes as $like) {
-                    $this->service->deleteObject($like);
-                }
+                $this->borrarLikes($likes);
             }
             $this->service->deleteObject($object);
             $js['respuesta'] = true;
@@ -198,8 +187,10 @@ class ContenidoController extends AbstractController
         if ($user && $this->isGranted('ROLE_ADMIN') && isset($_POST['codigo'])) {
             $id = $_POST['codigo'];
             $contenido = $this->service->getContentById($id);
+
             if ($contenido) {
                 $this->eliminarArchivo($contenido);
+                $this->borrarRelacionesContenido($contenido);
                 $this->service->deleteObject($contenido);
             }
         }
@@ -240,5 +231,45 @@ class ContenidoController extends AbstractController
         }
         $filePath = $folderPath . $file['name'];
         move_uploaded_file($file['tmp_name'], $filePath);
+    }
+    private function borrarCriticas($criticas)
+    {
+        foreach ($criticas as $critica) {
+            $comentarios = $critica->getComentarios();
+            $this->borrarComentarios($comentarios);
+            $likes = $critica->getLikes();
+            $this->borrarArray($likes);
+            $this->service->deleteObject($critica);
+        }
+    }
+    private function borrarComentarios($comentarios)
+    {
+        foreach ($comentarios as $comentario) {
+            $likes = $comentario->getLikes();
+            $this->borrarArray($likes);
+            $this->service->deleteObject($comentario);
+        }
+    }
+
+    private function borrarArray($array)
+    {
+        foreach ($array as $element) {
+            $this->service->deleteObject($element);
+        }
+    }
+    public function borrarRelacionesContenido(Contenido $contenido)
+    {
+        $criticas = $contenido->getCriticas();
+        $this->borrarCriticas($criticas);
+        $generos = $contenido->getGeneros();
+        $this->borrarArray($generos);
+        $reparto = $contenido->getReparto();
+        $this->borrarArray($reparto);
+        $valoraciones = $contenido->getValoraciones();
+        $this->borrarArray($valoraciones);
+        $favoritos = $this->service->getFavoritosContenido($contenido);
+        $this->borrarArray($favoritos);
+        $visitas = $this->service->getVisitasContenido($contenido);
+        $this->borrarArray($visitas);
     }
 }

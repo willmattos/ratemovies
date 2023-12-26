@@ -642,4 +642,12 @@ class Service
 		$content = $this->repository_critica->findBy(['user' => $user], ['fecha' => 'DESC']);
 		return $content;
 	}
+	public function getFavoritosContenido(Contenido $contenido){
+		$favoritos = $this->repository_favorito->findBy(['contenido' => $contenido]);
+		return $favoritos;
+	}
+	public function getVisitasContenido(Contenido $contenido){
+		$visitas = $this->repository_visita->findBy(['contenido' => $contenido]);
+		return $visitas;
+	}
 }
